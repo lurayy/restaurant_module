@@ -2,5 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('admin/', views.get_order, name = "get order"),
+    path('order/', views.order, name = "get and post order"),
+
+    path('menu/', views.menu, name = "get menu"),
 ]

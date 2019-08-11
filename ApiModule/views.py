@@ -2,5 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 # Create your views here.
-def get_order(request):
+def order(request):
     return HttpResponse("orders")
+
+def menu(request):
+    pass

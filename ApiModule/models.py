@@ -2,11 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import uuid
-import timezone
 
 class CustomUser(AbstractUser):
-    is_manager = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=True)
+    is_rmanager = models.BooleanField(default=False)
+    is_rstaff = models.BooleanField(default=True)
 
     uuid = models.UUIDField(unique = True, default = uuid.uuid4)
     
@@ -22,25 +21,25 @@ class Table(models.Model):
         return str(self.table_number)    
 
 
-class Manager(CustomUser):
+class R_Manager(CustomUser):
     REQUIRED_FIELDS = ('user',)
-    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "Manager", unique = True)
+    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "R_Manager", unique = True)
     contact_number = models.CharField(blank = True, max_length  =  14)
 
     def save(self, *args, **kwargs):
-        self.user.is_manager = True
-        self.user.is_staff = True
+        self.user.is_rmanager = True
+        self.user.is_rstaff = True
         super().save(*args, **kwargs)
 
 
-class Staff(CustomUser):
+class R_Staff(CustomUser):
     REQUIRED_FIELDS = ('user',)
-    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "Staff", unique = True)
+    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "R_Staff", unique = True)
     contact_number = models.CharField(blank = True, max_length  =  14)
 
     def save(self, *args, **kwargs):
-        self.user.is_manager = False
-        self.user.is_staff = True
+        self.user.is_rmanager = False
+        self.user.is_rstaff = True
         super().save(*args, **kwargs)
 
 class FoodType(models.Model):
