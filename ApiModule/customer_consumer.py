@@ -16,6 +16,7 @@ class CustomerConsumer(WebsocketConsumer):
                 'message': response,
             }
         )
+        print("response sent")
   
     def send_reply_response(self,message):
         async_to_sync (self.send(text_data = json.dumps({
@@ -23,36 +24,21 @@ class CustomerConsumer(WebsocketConsumer):
         })))
     
     def connect(self):
-        async_to_sync (self.channel_layer.group_add)(
-            GROUP_NAME,
-            self.channel_name
-        )
         print("Connecting Incommnig")
         self.accept()
         print(self.channel_name)
         print("Connection Accepted")
     
     def disconnect(self, close_code):
-        async_to_sync (self.channel_layer.group_discard)(
-            GROUP_NAME,
-            self.channel_name
-        )
+        self.close()
     
     def receive(self, text_data):        
         data = json.loads(text_data)
         print(data)
-        # type = data['type']
-        # if type == "getOrder":
-        #     self.get_order(data)
-        # elif type == "modifyOrder":
-        #     self.modify_order(data)
-        # elif type == "setOrder":
-        #     self.set_order()
-        # elif type == "getMenu":
-        #     self.get_menu()
-        # else:
-        #     self.handle_error()
-    
+        self.send_group_response(data)
+        
+    def save_order(self,data):
+        pass    
     
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}

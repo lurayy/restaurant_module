@@ -21,77 +21,92 @@
     
     </div>
    
-    <button type="button" class="btn btn-primary">
+    <button type="button" class="btn btn-primary" onclick="send_order()">
         Order
     </button>
 </div>
 
     <script>
+        var chatSocket = new WebSocket(
+                'ws://' + window.location.host +
+                '/ws/customer/');
+
+            chatSocket.onmessage = function(e) {
+                console.log(e)
+                popup(e)
+                };
+
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+            };
         $(document).ready(function() {
             create_menu()
         });
 
+
         total_price = 0
         ordered_item = {
-            'name': [],
-            'price': [],
+            'name':[],
+            'price':[],
+            'quantity':[]
         }
+
+        order_item_test = {}
+
         order_item_id = 0
 
         function add(name, price) {
-            ordered_item['name'].push(name);
-            ordered_item['price'].push(price);
+            if (ordered_item['name'].includes(name))
+            {
+                index = ordered_item['name'].indexOf(name)
+                ordered_item['quantity'][index] += 1  
+            }
+            else
+            {
+                ordered_item['name'].push(name);
+                ordered_item['price'].push(price);
+                ordered_item['quantity'].push(1);
+            }
+            
             order_item_id += 1
             total_price += parseInt(price)
             $("#name").append(
                 '<tr scope="row" class="list-group-item-action text-left" onclick="remove(' + order_item_id + ','+ "'" + name +"'" +')" id = "' + order_item_id + '" ><td>' + name + '</td><td style="width: 10px;" class="text-right">Rs.' + price + '</td></tr>'
             );
             document.getElementById("total_price").innerHTML = total_price;
+            
         }
 
         function remove(order_item_id, name ) {
-            $("#" + order_item_id).remove();
-            price = 0
-            for(var i=0; i<(ordered_item['name'].length); i++)
+            if (ordered_item['name'].includes(name))
             {
-                if(name == (ordered_item['name'][i]))
+                $("#" + order_item_id).remove();
+                price = 0
+                index = ordered_item['name'].indexOf(name)
+                price = ordered_item['price'][index]
+                if (ordered_item['quantity'][index] <=1 )
                 {
-                    price = ordered_item['price'][i];
-                    ordered_item['name'].splice(i,1);
-                    ordered_item['price'].splice(i,1);
-                    break
+                    ordered_item['name'].splice(index,1);
+                    ordered_item['price'].splice(index,1);
+                    ordered_item['quantity'].splice(index,1);
                 }
-            };
-            total_price = total_price - price           
-            document.getElementById("total_price").innerHTML = total_price;
+                else
+                {
+                    ordered_item['quantity'][index] -= 1
+                }
+                total_price = total_price - price           
+                document.getElementById("total_price").innerHTML = total_price;
+            
+            }
         }
 
-        function sendOrder() {
-            $.ajax({
-                type: 'POST',
-                url: '',
-                data: JSON.stringify(ordered_item),
-                success: function(data) {
-                    if(!alert('Your Order has been place and will get to you shortly. Thank you!')){window.location.reload();}
-                }
-            })
+        function send_order() {
+            chatSocket.send(JSON.stringify(ordered_item))
         }
 
         function create_menu() {
             data = {{ data | safe }}
-            outputData(data)
-            // $.ajax({
-            //     type: 'POST',
-            //     url: '/menu',
-            //     data: JSON.stringify(),
-            //     success: function(data) {
-            //         outputData(data);
-            //     },
-            //     error: function(data) {    
-            //         //error popup
-            //     }
-            // })
-
+            outputData(data);
         }
 
         function outputData(data) {
@@ -110,8 +125,8 @@
             }
         }
 
-        function popup(){
-
+        function popup(message){
+            alert(message)
         }
     </script>
 </body>

@@ -16,7 +16,15 @@ class ReceptionConsumer(WebsocketConsumer):
                 'message': response,
             }
         )
-  
+
+    def staff_message(self,event):
+        print("send staff")
+        message = event['message']
+        print(message)
+        async_to_sync (self.send(text_data = json.dumps({
+            'message':message
+        })))
+
     def send_reply_response(self,message):
         async_to_sync (self.send(text_data = json.dumps({
             'message':message

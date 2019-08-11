@@ -15,7 +15,7 @@
         '/ws/reception/');
 
     chatSocket.onmessage = function(e) {
-        console.log(e)
+        console.log(e['data'])
         };
 
     chatSocket.onclose = function(e) {
