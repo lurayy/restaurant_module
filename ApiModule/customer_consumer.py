@@ -5,7 +5,8 @@ from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
 
 GROUP_NAME = 'reception'
 
-class ReceptionConsumer(WebsocketConsumer):
+
+class CustomerConsumer(WebsocketConsumer):
 
     def send_group_response(self,response):
         async_to_sync (self.channel_layer.group_send)(
@@ -15,7 +16,44 @@ class ReceptionConsumer(WebsocketConsumer):
                 'message': response,
             }
         )
-
+  
+    def send_reply_response(self,message):
+        async_to_sync (self.send(text_data = json.dumps({
+            'message':message
+        })))
+    
+    def connect(self):
+        async_to_sync (self.channel_layer.group_add)(
+            GROUP_NAME,
+            self.channel_name
+        )
+        print("Connecting Incommnig")
+        self.accept()
+        print(self.channel_name)
+        print("Connection Accepted")
+    
+    def disconnect(self, close_code):
+        async_to_sync (self.channel_layer.group_discard)(
+            GROUP_NAME,
+            self.channel_name
+        )
+    
+    def receive(self, text_data):        
+        data = json.loads(text_data)
+        print(data)
+        # type = data['type']
+        # if type == "getOrder":
+        #     self.get_order(data)
+        # elif type == "modifyOrder":
+        #     self.modify_order(data)
+        # elif type == "setOrder":
+        #     self.set_order()
+        # elif type == "getMenu":
+        #     self.get_menu()
+        # else:
+        #     self.handle_error()
+    
+    
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}
     #     orders = Order.objects.filter(
@@ -69,42 +107,7 @@ class ReceptionConsumer(WebsocketConsumer):
     #     self.send_response(response)
     
 
-    def connect(self):
-        async_to_sync (self.channel_layer.group_add)(
-            GROUP_NAME,
-            self.channel_name
-        )
-        print("Connecting Incommnig")
-        self.accept()
-        print(self.channel_name)
-        print("Connection Accepted")
-    
-    def disconnect(self, close_code):
-        async_to_sync (self.channel_layer.group_discard)(
-            GROUP_NAME,
-            self.channel_name
-        )
-    
-    def receive(self, text_data):        
-        data = json.loads(text_data)
-        print(data)
-        # type = data['type']
-        # if type == "getOrder":
-        #     self.get_order(data)
-        # elif type == "modifyOrder":
-        #     self.modify_order(data)
-        # elif type == "setOrder":
-        #     self.set_order()
-        # elif type == "getMenu":
-        #     self.get_menu()
-        # else:
-        #     self.handle_error()
-    
-    def send_response_to_sender(self,message):
-        async_to_sync (self.send(text_data = json.dumps({
-            'message':message
-        })))
-
+   
     #imporvise this code make it adapt
     # def order(data):
     #     #data is send as a set of arrays wrapped in a dict.
@@ -136,3 +139,4 @@ class ReceptionConsumer(WebsocketConsumer):
     #     message = text_data_json['message']
     #     self.send(text_data= json.dumps({'message': message}))
         
+
