@@ -5,7 +5,6 @@ from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
 
 GROUP_NAME = 'reception'
 
-
 class ReceptionConsumer(WebsocketConsumer):
 
     def send_group_response(self,response):
@@ -49,18 +48,7 @@ class ReceptionConsumer(WebsocketConsumer):
     def receive(self, text_data):        
         data = json.loads(text_data)
         print(data)
-        # type = data['type']
-        # if type == "getOrder":
-        #     self.get_order(data)
-        # elif type == "modifyOrder":
-        #     self.modify_order(data)
-        # elif type == "setOrder":
-        #     self.set_order()
-        # elif type == "getMenu":
-        #     self.get_menu()
-        # else:
-        #     self.handle_error()
-    
+
     
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}

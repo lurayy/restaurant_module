@@ -1,7 +1,7 @@
 from channels.generic.websocket import WebsocketConsumer
 import json 
 from asgiref.sync import async_to_sync
-from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
+from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser, Table
 
 GROUP_NAME = 'reception'
 
@@ -35,11 +35,26 @@ class CustomerConsumer(WebsocketConsumer):
     def receive(self, text_data):        
         data = json.loads(text_data)
         print(data)
-        self.send_group_response(data)
+        self.save_order(data)
         
     def save_order(self,data):
-        pass    
-    
+        # try:
+        names = data['name']
+        table = Table.objects.get(table_number = int(data['table_number']))
+        order = Order.objects.create(table_number = table)
+        order.save()
+        for i in range(len(names)):
+            item = FoodItem.objects.get(name = str(names[i]))
+            ordered_item = OrderedItem.objects.create(order = order, food_item = item, quantity = int(data['quantity'][i]))
+            ordered_item.save()
+        response = {'order_id':order.id, 'state':order.state, 'time':str(order.timestamp), 'order':data}
+        self.send_group_response(response)
+        # except:
+        # self.send_reply_response("An error Occured, Please try again or contant an employee.")
+
+
+
+
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}
     #     orders = Order.objects.filter(

@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from ApiModule.models import FoodItem, FoodType
+from django.http import HttpResponse
+from ApiModule.models import FoodItem, FoodType, Table, Order, OrderedItem
 import json 
 
 
@@ -14,3 +15,4 @@ def menu(request):
             food_list[str(f.food_type)]['name'].append(str(f.name))
             food_list[str(f.food_type)]['price'].append(str(f.price))
     return render(request, 'MenuModule/menu.html', {'data':json.dumps(food_list)})
+
