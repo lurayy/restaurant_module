@@ -34,8 +34,8 @@ class CustomerConsumer(WebsocketConsumer):
     
     def receive(self, text_data):        
         data = json.loads(text_data)
-        print(data)
         self.save_order(data)
+        self.send_reply_response("Your Order is done. Thank you")
         
     def save_order(self,data):
         # try:
@@ -47,7 +47,7 @@ class CustomerConsumer(WebsocketConsumer):
             item = FoodItem.objects.get(name = str(names[i]))
             ordered_item = OrderedItem.objects.create(order = order, food_item = item, quantity = int(data['quantity'][i]))
             ordered_item.save()
-        response = {'order_id':order.id, 'state':order.state, 'time':str(order.timestamp), 'order':data}
+        response = {'order':{'id':order.id, 'state':order.state, 'timestamp':str(order.timestamp), 'table_number':data['table_number']}, 'order_item':data}
         self.send_group_response(response)
         # except:
         # self.send_reply_response("An error Occured, Please try again or contant an employee.")

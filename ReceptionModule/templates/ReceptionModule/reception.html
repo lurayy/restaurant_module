@@ -1,13 +1,12 @@
-<!-- chat/templates/chat/room.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Reception</title>
-</head>
+{% extends 'MenuModule/base.html' %} {% block content %}
 <body>
+
+<div id="orders">
+
+    </div>
+
+
     <button onclick="send_data()">Send</button>
-</body>
 <script>
   
     var chatSocket = new WebSocket(
@@ -16,6 +15,7 @@
 
     chatSocket.onmessage = function(e) {
         console.log(e['data'])
+        update_order(e['data'])
         };
 
     chatSocket.onclose = function(e) {
@@ -26,6 +26,11 @@
     {
         chatSocket.send(JSON.stringify("data is go"));
     }
-
+    function update_order(data)
+    {
+        $("#orders").append(data);
+            
+    }
 </script>
-</html>
+</body>
+{% endblock %}

@@ -62,7 +62,8 @@ class Order(models.Model):
     STATES = (
         ('PAID', "Paid"),
         ('PENDING', "Pending"),
-        ('CANCELED', "Canceled")
+        ('CANCELED', "Canceled"),
+        ('REFUND',"REFUND")
     )
     state = models.CharField(max_length=8, choices=STATES, default='PENDING')
     timestamp = models.DateTimeField(default=timezone.now)
