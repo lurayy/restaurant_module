@@ -130,7 +130,7 @@
                     "<li><a href='#" + food_type + "'  class='js-scroll-trigger'>" + food_type + "</a></li>"
                 )
                 $("#main").append(
-                    "<section id='" + food_type + "'><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th class='' colspan='2'>" + food_type + "</th></tr></tbody></table><br><br></section>"
+                    "<section id='" + food_type + "'><button class='accordion'>" + food_type + "</button><div class='panel'><p><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th colspan='2'></th></tr></tbody></table></p></div><br><br></section>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#food_data_' + food_type).append(
@@ -153,6 +153,21 @@
             $('a').css("text-decoration","none")
             $('li').css("color","#2b2c2d")
         });
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+            panel.style.display = "none";
+            } else {
+            panel.style.display = "block";
+            }
+        });
+        }
 
     </script>
 </body>
