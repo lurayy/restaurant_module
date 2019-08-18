@@ -6,14 +6,19 @@ Page ma suru ma load hunae order haru .. sabai pending matra :
 
 <div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
     <div class="card-columns" style="padding-top:80px; padding-bottom:80px;">
-    {% for orders in orders.order %}   
+    {% for orders in data.orders %}   
       <div class="card">
         <div class="card-body">  
-         <h5 class="card-title">{{ orders.table_number }}</h5>
-         <p class="card-text"><small class="text-muted" >{{ order.timestamp | time }} <br> #{{ orders.id }}</small></p>
+         <h5 class="card-title">{{ orders.table_number }}<br>{{ orders.state }}</h5>
+         <p class="card-text"><small class="text-muted" >{{ orders.timestamp | time }} <br> #{{ orders.id }}</small></p>
          <ol style="padding-left:20px">
-            {% for name in order.name %}
-            <li>{{ name }}</li>
+            {% for name in orders.ordered_item.name %}
+            <table>
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ quantity }}</td>
+                </tr>
+            </table>
             {% endfor %}
         </ol>
             
