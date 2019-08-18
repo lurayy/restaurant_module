@@ -41,7 +41,7 @@ class CustomerConsumer(WebsocketConsumer):
         # try:
         names = data['name']
         table = Table.objects.get(table_number = int(data['table_number']))
-        order = Order.objects.create(table_number = table)
+        order = Order.objects.create(table_number = table, paid_price = int(data['paid_price']))
         order.save()
         for i in range(len(names)):
             item = FoodItem.objects.get(name = str(names[i]))

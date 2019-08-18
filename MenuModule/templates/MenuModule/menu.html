@@ -49,7 +49,8 @@
             'table_number':1,
             'name':[],
             'price':[],
-            'quantity':[]
+            'quantity':[],
+            'paid_price':0
         }
 
         order_item_test = {}
@@ -75,6 +76,7 @@
                 '<tr scope="row" class="list-group-item-action text-left" onclick="remove(' + order_item_id + ','+ "'" + name +"'" +')" id = "' + order_item_id + '" ><td>' + name + '</td><td style="width: 10px;" class="text-right">Rs.' + price + '</td></tr>'
             );
             document.getElementById("total_price").innerHTML = total_price;
+            ordered_item['paid_price'] = total_price;
             
         }
 

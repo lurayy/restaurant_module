@@ -1,6 +1,13 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 <body>
 
+Page ma suru ma load hunae order haru .. sabai pending matra : 
+{{ data }}
+
+
+<br>
+<br>
+paxi live update ma aako order
 <div id="orders">
 
     </div>
@@ -29,6 +36,7 @@
     function update_order(data)
     {
         $("#orders").append(data);
+        $("#orders").append("<br>");
             
     }
 </script>

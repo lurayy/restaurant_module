@@ -12,13 +12,15 @@ def menu(request):
     pass
 
 def reception(request):
-    orders_json = {'orders':[]} 
-    # orders = Order.objects.filter(state = "PENDING").order_by('timestamp')[:20].values('id','state','timestamp','table_number')
+    response_json = {'orders':[]} 
     orders = Order.objects.filter(state="PENDING").order_by('timestamp')[:20]
-    print(orders)
     for order in orders:
-        # food_items = 
-        # ser_order = serializers.serialize('json',[order,])
-        orders_json['orders'].append(order)
-    print(orders_json)
-    return render(request, 'ReceptionModule/reception.html', {'data':orders_json})
+        json_order = {'id':order.id,'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
+        ordered_items = OrderedItem.objects.filter(order = order)
+        for ordered_item in ordered_items:
+            json_order['ordered_item']['name'].append(str(ordered_item.food_item.name))
+            json_order['ordered_item']['price'].append(str(ordered_item.food_item.price))
+            json_order['ordered_item']['quantity'].append(str(ordered_item.quantity))
+        response_json['orders'].append(json_order)
+    print(response_json)
+    return render(request, 'ReceptionModule/reception.html', {'data':response_json})
