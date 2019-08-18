@@ -10,9 +10,12 @@
     <div class="row">
             <div class="d-none d-lg-block sidebar-item col-lg-3 col-md-3">
                     <ul style="list-style-type:none;" class="text-left">
+                            <div id='accordion'>
                         <div id="dynamic_menu">
+                            
 
                         </div>
+                            </div>
                     </ul>
                 </div>
     <div class="content section col-lg-6 col-md-6" id="main">
@@ -130,7 +133,7 @@
                     "<li><a href='#" + food_type + "'  class='js-scroll-trigger'>" + food_type + "</a></li>"
                 )
                 $("#main").append(
-                    "<section id='" + food_type + "'><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th class='' colspan='2'>" + food_type + "</th></tr></tbody></table><br><br></section>"
+                    "<div class='card'><div class='card-header' id='heading_food_data_" + food_type + "'><h1><button class='btn btn-link collapsed' data-toggle='collapse' data-target='#food_data_" + food_type + "' aria-expanded='false' aria-controls='food_data_" + food_type + "'>" + food_type + "</button></h1><div id='food_data_" + food_type + "' class='collapse' aria-labelledby='heading_food_data_" + food_type + "' data-parent='#accordion'><div class='card-body'><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr></tr></tbody></table></div></div></div></div>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#food_data_' + food_type).append(
