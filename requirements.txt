@@ -9,3 +9,5 @@ protobuf==3.0.0
 redis==3.3.6
 redislite==5.0.142319
 requests==2.18.4
+
+# sudo apt-get install python3-psycogy2 or smth likethat

@@ -68,6 +68,7 @@ class Order(models.Model):
     state = models.CharField(max_length=8, choices=STATES, default='PENDING')
     timestamp = models.DateTimeField(default=timezone.now)
     table_number = models.ForeignKey(Table, on_delete = models.SET_NULL, null = True)
+    paid_price = models.PositiveIntegerField(default = 0)
 
     def __str__(self):
         return str(self.table_number)
