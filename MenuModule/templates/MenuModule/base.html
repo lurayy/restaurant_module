@@ -1,4 +1,5 @@
 {% load static %}
+
 <!doctype html>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +12,24 @@
   <meta name="author" content="">
 
   <title>Restaurant</title>
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+  <style>
+      .sticky-footer {
+         position: fixed;
+         left: 0;
+         bottom: 0;
+         height: 50px;
+         width: 100%;
+         background-color: #FBF9F9;
+         color: rgb(78, 78, 78);
+         text-align: center;
+         z-index: 1;
+         padding: 0.75rem;
+      }
+      </style>
 
 
 </head>

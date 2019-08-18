@@ -1,17 +1,25 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 
 <body>
-    <!-- <div id="dynamic_menu">
-
-    </div> -->
+<nav class="navbar navbar-light bg-light sticky-top">
+        <a class="navbar-brand mx-auto" href="#">The Restaurant</a>
+</nav>
     <br>
 
 <div class="container">
-    <div class="content section col-lg-7 col-md-7" id="main">
+    <div class="row">
+            <div class="d-none d-lg-block sidebar-item col-lg-3 col-md-3">
+                    <ul style="list-style-type:none;" class="text-left">
+                        <div id="dynamic_menu">
+
+                        </div>
+                    </ul>
+                </div>
+    <div class="content section col-lg-6 col-md-6" id="main">
 
     </div>
-    <div class='content section'>
-        <h1 id="total_price" class="" style="padding-top:150px;"></h1>
+    <div class='content section col-lg-3 col-md-3'style="padding-bottom:50px;">
+        <h1 id="total_price"></h1>
         <table class="table table-sm" id="name">
             <tr>
                 <th class="text-white text-left">Name</th>
@@ -19,12 +27,18 @@
             </tr>
         </table>
     
-    </div>
+   
    
     <button type="button" class="btn btn-primary" onclick="send_order()">
         Order
     </button>
 </div>
+</div>
+</div>
+<div class="sticky-footer d-md-none border-top">
+        <p id="total_price">Not Working</p>
+    </div>
+
 
     <script>
         var chatSocket = new WebSocket(
@@ -136,7 +150,10 @@
             });
             $('td').css("padding","10px 5px 10px 0px")
             $('th').css("padding","5px 0px 5px 0px")
+            $('a').css("text-decoration","none")
+            $('li').css("color","#2b2c2d")
         });
+
     </script>
 </body>
 {% endblock %}
