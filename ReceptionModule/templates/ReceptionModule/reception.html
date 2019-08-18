@@ -4,6 +4,31 @@
 Page ma suru ma load hunae order haru .. sabai pending matra : 
 {{ data }}
 
+<div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
+    <div class="card-columns" style="padding-top:80px; padding-bottom:80px;">
+    {% for orders in orders.order %}   
+      <div class="card">
+        <div class="card-body">  
+         <h5 class="card-title">{{ orders.table_number }}</h5>
+         <p class="card-text"><small class="text-muted" >{{ order.timestamp | time }} <br> #{{ orders.id }}</small></p>
+         <ol style="padding-left:20px">
+            {% for name in order.name %}
+            <li>{{ name }}</li>
+            {% endfor %}
+        </ol>
+            
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" onclick="done({{ order.id }})" data-target="#exampleModal">
+                Done
+            </button>
+              
+
+        </div>
+      </div>
+      {% endfor %}
+      </div>
+            
+    </div>  
 
 <br>
 <br>
