@@ -1,13 +1,66 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 <body>
+    <div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
+        <div class="card-columns" style="padding-top:80px; padding-bottom:80px;" id = "dynamic_order">
+    
+        </div>
+                
+        </div>  
+        
+    <button onclick="send_data()">Send</button>
+<script>
+  
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/reception/');
 
-Page ma suru ma load hunae order haru .. sabai pending matra : 
-{{ data }}
+    chatSocket.onmessage = function(e) {
+        console.log(e['data'])
+        };
 
-<div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
-    <div class="card-columns" style="padding-top:80px; padding-bottom:80px;">
-    {% for orders in data.orders %}   
-      <div class="card">
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    function send_data()
+    {
+        chatSocket.send(JSON.stringify("data is go"));
+    }
+    
+
+    $(document).ready(function() {
+            load_order()
+        });
+
+    function load_order() 
+    {
+        data= {{ data | safe}}
+        orders = data['orders']
+        for (i = 0; i< (orders.length); i++)
+        {
+            create_order_block(orders[i])
+        }
+    }
+
+    function create_order_block(order)
+    {
+        $("#dynamic_order").append(
+            "<ul><li>"+ order.id +" </li></ul><ul id='"+ order.id +"'></ul>"
+            );
+        for (i = 0; i<(order.name.length); i++)
+        {
+            $('#'+ order.id).append(
+                "<li>" + order.name[i] + "</li>"
+            )
+        }
+        console.log(order)
+    }
+
+</script>
+</body>
+{% endblock %}
+<!-- 
+<div class="card">
         <div class="card-body">  
          <h5 class="card-title">{{ orders.table_number }}<br>{{ orders.state }}</h5>
          <p class="card-text"><small class="text-muted" >{{ orders.timestamp | time }} <br> #{{ orders.id }}</small></p>
@@ -22,7 +75,7 @@ Page ma suru ma load hunae order haru .. sabai pending matra :
             {% endfor %}
         </ol>
             
-            <!-- Button trigger modal -->
+            Button trigger modal
             <button type="button" class="btn btn-primary" onclick="done({{ order.id }})" data-target="#exampleModal">
                 Done
             </button>
@@ -30,45 +83,4 @@ Page ma suru ma load hunae order haru .. sabai pending matra :
 
         </div>
       </div>
-      {% endfor %}
-      </div>
-            
-    </div>  
-
-<br>
-<br>
-paxi live update ma aako order
-<div id="orders">
-
-    </div>
-
-
-    <button onclick="send_data()">Send</button>
-<script>
-  
-    var chatSocket = new WebSocket(
-        'ws://' + window.location.host +
-        '/ws/reception/');
-
-    chatSocket.onmessage = function(e) {
-        console.log(e['data'])
-        update_order(e['data'])
-        };
-
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-    };
-
-    function send_data()
-    {
-        chatSocket.send(JSON.stringify("data is go"));
-    }
-    function update_order(data)
-    {
-        $("#orders").append(data);
-        $("#orders").append("<br>");
-            
-    }
-</script>
-</body>
-{% endblock %}
+       -->
