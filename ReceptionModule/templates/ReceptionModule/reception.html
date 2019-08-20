@@ -4,10 +4,7 @@
         <div class="card-columns" style="padding-top:80px; padding-bottom:80px;" id = "dynamic_order">
     
         </div>
-                
-        </div>  
-        
-    <button onclick="send_data()">Send</button>
+</div>                
 <script>
   
     var chatSocket = new WebSocket(
@@ -32,55 +29,43 @@
             load_order()
         });
 
-    function load_order() 
-    {
-        data= {{ data | safe}}
-        orders = data['orders']
-        for (i = 0; i< (orders.length); i++)
-        {
-            create_order_block(orders[i])
-        }
-    }
+
 
     function create_order_block(order)
     {
         $("#dynamic_order").append(
             "<ul><li>"+ order.id +" </li></ul><ul id='"+ order.id +"'></ul>"
             );
-        for (i = 0; i<(order.name.length); i++)
-        {
-            $('#'+ order.id).append(
-                "<li>" + order.name[i] + "</li>"
-            )
-        }
+
+        var x = order['ordered_item']['name'].length
         console.log(order)
+        $("#dynamic_order").append(
+            '<div class="card" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'<br>'+order.state+'</h5><p class="card-text"><small class="text-muted" >'+order.timestamp+'<br>'+order.id +'</small></p><ol style="padding-left:20px" id='+order.id+'_ordered_food> </ol><strong>Total:'+order.paid_price+'<button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')">Cancel</button></div></div>')
+        
+        for (var nax in order['ordered_item']['name'])
+        {
+            $("#"+order.id+"_ordered_food").append('<table><tr><td>'+order['ordered_item']['name'][nax]+'</td><td>'+order['ordered_item']['quantity'][nax]+'</td><td>'+ order['ordered_item']['price'][nax]+'</td></tr></table>')
+        }    
+        
     }
+
+    function update_order(order_id, state)
+    {
+        console.log(order_id, state)
+    }
+
+    function load_order() 
+    {
+        data= {{ data | safe}}
+        orders = data['orders']
+        console.log(orders.length)
+        for (i = 0; i< (orders.length); i++)
+        {
+            create_order_block(orders[i])
+        }
+    }
+
 
 </script>
 </body>
 {% endblock %}
-<!-- 
-<div class="card">
-        <div class="card-body">  
-         <h5 class="card-title">{{ orders.table_number }}<br>{{ orders.state }}</h5>
-         <p class="card-text"><small class="text-muted" >{{ orders.timestamp | time }} <br> #{{ orders.id }}</small></p>
-         <ol style="padding-left:20px">
-            {% for name in orders.ordered_item.name %}
-            <table>
-                <tr>
-                    <td>{{ name }}</td>
-                    <td>{{ quantity }}</td>
-                </tr>
-            </table>
-            {% endfor %}
-        </ol>
-            
-            Button trigger modal
-            <button type="button" class="btn btn-primary" onclick="done({{ order.id }})" data-target="#exampleModal">
-                Done
-            </button>
-              
-
-        </div>
-      </div>
-       -->
