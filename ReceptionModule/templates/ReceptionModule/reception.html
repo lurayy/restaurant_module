@@ -13,6 +13,12 @@
 
     chatSocket.onmessage = function(e) {
         console.log(e['data'])
+        // type = update , get, 
+        // successs = 0,
+        // if su == 0
+        // {
+        //     fail_popup(data['error'])
+        // }
         };
 
     chatSocket.onclose = function(e) {
@@ -24,12 +30,6 @@
         chatSocket.send(JSON.stringify("data is go"));
     }
     
-
-    $(document).ready(function() {
-            load_order()
-        });
-
-
 
     function create_order_block(order)
     {
@@ -49,14 +49,29 @@
         
     }
 
+    function get_orders(state)
+    {
+        console.log(state)
+        //success load_data(data)
+        //fail fail_popup()
+    }
+
+    function fail_popup(fail_type)
+    {
+        console.log(fail_popup)
+        // data load error = error_loading_data
+        // state change order = error_state_change
+
+    }
+
+
     function update_order(order_id, state)
     {
         console.log(order_id, state)
     }
 
-    function load_order() 
+    function load_order(data) 
     {
-        data= {{ data | safe}}
         orders = data['orders']
         console.log(orders.length)
         for (i = 0; i< (orders.length); i++)
@@ -64,6 +79,12 @@
             create_order_block(orders[i])
         }
     }
+
+    $(document).ready(function() {
+            data= {{ data | safe}}
+            load_order(data);
+    });
+
 
 
 </script>

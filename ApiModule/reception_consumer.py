@@ -45,10 +45,29 @@ class ReceptionConsumer(WebsocketConsumer):
             self.channel_name
         )
     
+    def update_order(self,order_id,state):
+        response_json = {'success':1}
+        order = Order.objects.gets(id = int(order_id))
+        if (str(state) == "Done"):
+            order.state = "DONE"
+            order.save()
+        elif (str(state) == "Cancel"):
+            order.state = "CANCELED"
+            order.save()
+        elif (str(state) == "Pending"):
+            order.state = "PENDING"
+            order.save()
+        elif (str(state) == "Pending"):
+            order.state = "PENDING"
+            order.save()
+        else:
+            response_json['success'] = 0
+
     def receive(self, text_data):        
         data = json.loads(text_data)
-        print(data)
-
+        if (str(data['type']) == 'update'):
+            self.update_order(data['order_id'],data['state'])
+        # elif (str(data['type']) == '')
     
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}
