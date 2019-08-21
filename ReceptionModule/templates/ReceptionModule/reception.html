@@ -1,7 +1,7 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 <body>
     <div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
-        <div class="card-columns" style="padding-top:80px; padding-bottom:80px;" id = "dynamic_order">
+        <div class="card-columns" id = "dynamic_order">
     
         </div>
 </div>
@@ -44,17 +44,13 @@
 
     function create_order_block(order)
     {
-        $("#dynamic_order").append(
-            "<ul><li>"+ order.id +" </li></ul><ul id='"+ order.id +"'></ul>"
-            );
-
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
-            '<div class="card" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'<br>'+order.state+'</h5><p class="card-text"><small class="text-muted" >'+order.timestamp+'<br>'+order.id +'</small></p><ol style="padding-left:20px" id='+order.id+'_ordered_food> </ol><strong>Total:'+order.paid_price+'<button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')">Cancel</button></div></div>')
+            '<div class="card" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'</small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
         
         for (var nax in order['ordered_item']['name'])
         {
-            $("#"+order.id+"_ordered_food").append('<table><tr><td>'+order['ordered_item']['name'][nax]+'</td><td>'+order['ordered_item']['quantity'][nax]+'</td><td>'+ order['ordered_item']['price'][nax]+'</td></tr></table>')
+            $("#"+order.id+"_ordered_food").append('<tr><td style:"width:100%;">'+order['ordered_item']['name'][nax]+'</td><td style="text-align:center;">'+order['ordered_item']['quantity'][nax]+'</td><td style="text-align:right;">'+ order['ordered_item']['price'][nax]+'</td></tr>')
         }    
         
     }
@@ -100,7 +96,12 @@
             load_order(data);
     });
 
-
+    $(document).ready(function(){
+            $('thead').css("font-weight","bold")         
+            $('thead').css("border-bottom", "1px solid #ddd")
+            $('thead').css("padding-bottom","20px")
+            $('.card-columns').css("padding","10px 10px 10px 10px")
+        });
 
 </script>
 </body>
