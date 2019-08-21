@@ -46,28 +46,49 @@ class ReceptionConsumer(WebsocketConsumer):
         )
     
     def update_order(self,order_id,state):
-        response_json = {'success':1}
-        order = Order.objects.gets(id = int(order_id))
-        if (str(state) == "Done"):
-            order.state = "DONE"
-            order.save()
-        elif (str(state) == "Cancel"):
-            order.state = "CANCELED"
-            order.save()
-        elif (str(state) == "Pending"):
-            order.state = "PENDING"
-            order.save()
-        elif (str(state) == "Pending"):
-            order.state = "PENDING"
-            order.save()
-        else:
+        response_json = {'type':"update", 'success':1, 'message' : "Order Successfully updated"}
+        state = str(state).lower()
+        try:
+            order = Order.objects.get(id = int(order_id))
+            if (str(state) == "done"):
+                order.state = "DONE"
+                order.save()
+            elif (str(state) == "cancel"):
+                order.state = "CANCELED"
+                order.save()
+            elif (str(state) == "pending"):
+                order.state = "PENDING"
+                order.save()
+            else:
+                response_json['success'] = 0
+                response_json['message'] = "Error Updating Order state. Invalid State"
+        except:
             response_json['success'] = 0
+            response_json['message'] = "Error Updating Order state. Invalid Order Id. Cannot Retrive Order"
+        if (response_json['success']):
+            # since only state is updated
+            updated_order = {'id':int(order.id), 'state':str(order.state)}
+            response_json['updated_order'] = updated_order
+            self.send_group_response(response_json)
+        else:
+            self.send_reply_response(response_json)
+            
+
+    # def get_order(order_type, get_by, )
 
     def receive(self, text_data):        
         data = json.loads(text_data)
-        if (str(data['type']) == 'update'):
+        if (str(data["type"]) == "update"):
             self.update_order(data['order_id'],data['state'])
-        # elif (str(data['type']) == '')
+
+
+        #get order , get_by = date, search_by_id,   
+        # elif (str(data['type']) == 'get'):
+        #     self.get_order(data['order_type'])
+
+
+
+
     
     # def get_order(self,data):
     #     response = {'type':'getOrderResponse','state':data['state'], 'order': []}

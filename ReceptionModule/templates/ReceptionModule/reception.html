@@ -4,7 +4,10 @@
         <div class="card-columns" style="padding-top:80px; padding-bottom:80px;" id = "dynamic_order">
     
         </div>
-</div>                
+</div>
+
+
+
 <script>
   
     var chatSocket = new WebSocket(
@@ -12,22 +15,30 @@
         '/ws/reception/');
 
     chatSocket.onmessage = function(e) {
-        console.log(e['data'])
-        // type = update , get, 
-        // successs = 0,
-        // if su == 0
-        // {
-        //     fail_popup(data['error'])
-        // }
-        };
+        data = JSON.parse(e['data']) 
+        data =data['message']
+        if(data['success'])
+        {
+            if (data['type'] == "update")
+            {
+                //ahiale ko lagi remove garyae ko xu .. but update vako order green wa kai ma daykhanae and .. refresh click garyae si balla janae 
+                $("#"+data['updated_order']['id']).remove()
+                success_popup(data["message"])
+            }
+        }
+        else 
+        {
+            error_popup(data['message'])
+        }
+    };
 
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
 
-    function send_data()
+    function send_data(data)
     {
-        chatSocket.send(JSON.stringify("data is go"));
+        chatSocket.send(JSON.stringify(data));
     }
     
 
@@ -38,7 +49,6 @@
             );
 
         var x = order['ordered_item']['name'].length
-        console.log(order)
         $("#dynamic_order").append(
             '<div class="card" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'<br>'+order.state+'</h5><p class="card-text"><small class="text-muted" >'+order.timestamp+'<br>'+order.id +'</small></p><ol style="padding-left:20px" id='+order.id+'_ordered_food> </ol><strong>Total:'+order.paid_price+'<button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')">Cancel</button></div></div>')
         
@@ -56,24 +66,29 @@
         //fail fail_popup()
     }
 
-    function fail_popup(fail_type)
+    function error_popup(message)
     {
-        console.log(fail_popup)
+        console.log(message)
+        alert(message)
         // data load error = error_loading_data
         // state change order = error_state_change
 
     }
 
+    function success_popup(message)
+    {
+        alert(message)
+    }
 
     function update_order(order_id, state)
     {
-        console.log(order_id, state)
+        info = {'type':"update",'order_id':order_id, 'state':state}
+        send_data(info)
     }
 
     function load_order(data) 
     {
         orders = data['orders']
-        console.log(orders.length)
         for (i = 0; i< (orders.length); i++)
         {
             create_order_block(orders[i])
