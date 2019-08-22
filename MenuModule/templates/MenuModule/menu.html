@@ -18,7 +18,7 @@
     <div class="content section col-lg-6 col-md-6" id="main">
 
     </div>
-    <div class='content section col-lg-3 col-md-3'style="padding-bottom:50px;">
+    <div class='content section col-lg-3 col-md-3'style="padding-bottom:50px;" id="billing">
         <h1 id="total_price"></h1>
         <table class="table table-sm" id="name">
             <tr>
@@ -34,8 +34,16 @@
 </div>
 </div>
 <div class="sticky-footer d-md-none border-top">
-        <p id="total_price_foot"></p>
-    </div>
+        <table style="table-layout: fixed; width: 100%">
+            <tr>
+                <td>
+                    <a href="#billing" class="js-scroll-trigger">What did I order?</a>
+                </td>
+                <td id="total_price_foot">
+                </td>
+            </tr>
+        </table>
+</div>
 
 
     <script>
@@ -127,14 +135,14 @@
         function outputData(data) {
             for (var food_type in data) {
                 $("#dynamic_menu").append(
-                    "<li><a href='#" + food_type + "'  class='js-scroll-trigger'>" + food_type + "</a></li>"
+                    "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
                 )
                 $("#main").append(
-                    "<section id='" + food_type + "'><button class='accordion'>" + food_type + "</button><div class='panel'><p><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th colspan='2'></th></tr></tbody></table></p></div><br><br></section>"
+                    "<section id='" + food_type + "'><button>" + food_type + "</button><div><p><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th class='menuth' colspan='2'></th></tr></tbody></table></p></div><br><br></section>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#food_data_' + food_type).append(
-                        "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +")'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td></tr>"
+                        "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +"); displaycount();'><td class='menutd'>" + data[food_type].name[i] + "</td><td class='text-right menutd'>Rs." + data[food_type].price[i] + "</td><td class='menutd' id='clickcount'></td></tr>"
                     )
                 }
             }
@@ -145,13 +153,12 @@
         }
 
         $(document).ready(function(){
-            $('td').css({
+            $('menutd').css({
                 fontSize: "1rem"
             });
-            $('td').css("padding","10px 5px 10px 0px")
-            $('th').css("padding","5px 0px 5px 0px")
+            $('.menutd').css("padding","10px 5px 10px 0px")
+            $('.menuth').css("padding","5px 0px 5px 0px")
             $('a').css("text-decoration","none")
-            $('li').css("color","#2b2c2d")
         });
 
         var acc = document.getElementsByClassName("accordion");
@@ -167,6 +174,17 @@
             panel.style.display = "block";
             }
         });
+        }
+
+        // Click Counter
+        
+        var count = (function(){
+            var counter = 0;
+            return function () {return counter +=1;}
+        })();
+
+        function displaycount(){
+            document.getElementById("clickcount").innerHTML = count();
         }
 
     </script>
