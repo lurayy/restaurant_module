@@ -34,7 +34,7 @@
 </div>
 </div>
 <div class="sticky-footer d-md-none border-top">
-        <p id="total_price">Not Working</p>
+        <p id="total_price_foot"></p>
     </div>
 
 
@@ -87,6 +87,8 @@
                 '<tr scope="row" class="list-group-item-action text-left" onclick="remove(' + order_item_id + ','+ "'" + name +"'" +')" id = "' + order_item_id + '" ><td>' + name + '</td><td style="width: 10px;" class="text-right">Rs.' + price + '</td></tr>'
             );
             document.getElementById("total_price").innerHTML = total_price;
+
+            document.getElementById("total_price_foot").innerHTML = total_price;
             
         }
 
