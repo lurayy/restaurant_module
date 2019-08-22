@@ -1,6 +1,34 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 <body>
-    <div class="container" style="height: 1080px; padding: 50px 0px 0px 0px;">
+
+            
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="user-view">
+      <div class="background">
+        </div>
+        <a><span class="name">John Doe</span></a>
+        <a><span class=" email">jdandturk@gmail.com</span></a>
+       </div>
+    </li>
+    <li><div class="divider"></div></li>
+    <li><a class="waves-effect" href="#!">All</a></li>
+    <li><a class="waves-effect" href="#!">Pending</a></li>
+    <li><a class="waves-effect" href="#!">Completed</a></li>
+    </ul>
+<nav><a href="#!" class="brand-logo center">Reception</a>
+    <ul>
+      <li>
+          <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i>
+        </a>
+    </li>
+</ul>
+</nav>
+  
+
+    <div class="container" >
+
+  
         <div class="card-columns" id = "dynamic_order">
     
         </div>
@@ -9,6 +37,14 @@
 
 
 <script>
+    // sidenav 
+    (function($){
+  $(function(){
+
+    $('.sidenav').sidenav();
+
+  }); // end of document ready
+})(jQuery); // end of jQuery name space
   
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
@@ -46,7 +82,7 @@
     {
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
-            '<div class="card" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'</small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
+            '<div class="card '+ order.state +'" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'</small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
         
         for (var nax in order['ordered_item']['name'])
         {
@@ -101,6 +137,7 @@
             $('thead').css("border-bottom", "1px solid #ddd")
             $('thead').css("padding-bottom","20px")
             $('.card-columns').css("padding","10px 10px 10px 10px")
+            $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
         });
 
 </script>
