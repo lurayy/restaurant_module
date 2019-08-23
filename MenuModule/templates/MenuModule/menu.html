@@ -65,8 +65,7 @@
             'table_number':1,
             'name':[],
             'price':[],
-            'quantity':[],
-            'paid_price':0
+            'quantity':[]
         }
 
         order_item_test = {}
@@ -123,6 +122,7 @@
         }
 
         function send_order() {
+            ordered_item['paid_price'] = total_price
             chatSocket.send(JSON.stringify(ordered_item))
         }
 

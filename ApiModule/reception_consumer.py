@@ -75,7 +75,23 @@ class ReceptionConsumer(WebsocketConsumer):
             
 
     def get_order(self, data ):
-        pass
+        response = {'type': 'get_order_response', 'orders':[]}
+        x = int(data['to'])
+        y = int(data['from'])
+        print(x,y)
+        orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
+        print(orders)
+        for order in orders:
+            json_order = {'id':order.id,'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
+            ordered_items = OrderedItem.objects.filter(order = order)
+            for ordered_item in ordered_items:
+                json_order['ordered_item']['name'].append(str(ordered_item.food_item.name))
+                json_order['ordered_item']['price'].append(str(ordered_item.food_item.price))
+                json_order['ordered_item']['quantity'].append(str(ordered_item.quantity))
+            response['orders'].append(json_order)
+        print(response)
+        self.send_reply_response(response)
+        
 
     def receive(self, text_data):        
         data = json.loads(text_data)

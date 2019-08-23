@@ -13,7 +13,7 @@ def menu(request):
 
 def reception(request):
     response_json = {'orders':[]} 
-    orders = Order.objects.filter(state="PENDING").order_by('id')[:20]
+    orders = Order.objects.filter(state="PENDING").order_by('timestamp')[:20]
     for order in orders:
         json_order = {'id':order.id,'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
         ordered_items = OrderedItem.objects.filter(order = order)

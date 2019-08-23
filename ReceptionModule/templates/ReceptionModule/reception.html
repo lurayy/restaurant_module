@@ -34,7 +34,7 @@
         </div>
 </div>
 
-
+<button onclick="test()">test</button>
 
 <script>
     // sidenav 
@@ -69,6 +69,7 @@
         }
         else
         {
+            console.log(data)
             error_popup(data['message'])
         }
     };
@@ -79,9 +80,15 @@
 
     function send_data(data)
     {
+        console.log(data)
         chatSocket.send(JSON.stringify(data));
     }
     
+    function test()
+    {
+        info = {'type': "get", 'state': "PENDING", 'to': 3, 'from': 5}
+        send_data(info);
+    }
 
     function create_order_block(order)
     {
