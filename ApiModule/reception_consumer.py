@@ -85,6 +85,7 @@ class ReceptionConsumer(WebsocketConsumer):
             orders = Order.objects.all().order_by('-timestamp')[x:y]
         else:
             orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
+            print(orders)
         for order in orders:
             json_order = {'id':order.id,'is_paid':order.is_paid, 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
             ordered_items = OrderedItem.objects.filter(order = order)

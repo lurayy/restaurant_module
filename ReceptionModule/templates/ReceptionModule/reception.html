@@ -18,7 +18,7 @@
           <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
             <a class="dropdown-item" href="#">All</a>
             <a class="dropdown-item" href="#">Pending</a>
-            <a class="dropdown-item" onclick="request_orders('DONE', 0,20)">Done</a>
+            <a class="dropdown-item" onclick="request_orders('DONE', 0,4)">Done</a>
             <a class="dropdown-item" href="#">Unpaid</a>
           </div>
         </li>
@@ -88,7 +88,7 @@
     }
 
     function request_orders(state,to,from){
-        info = {'type': "get", 'state': JSON.stringify(state) , 'to': parseint(to) , 'from': parseint(from)}
+        info = {'type': "get", 'state': JSON.stringify(state) , 'to': to , 'from': from}
         send_data(info)
     }
 
