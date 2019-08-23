@@ -60,7 +60,7 @@ class FoodItem(models.Model):
 
 class Order(models.Model):
     STATES = (
-        ('PAID', "Paid"),
+        ('DONE', "Done"),
         ('PENDING', "Pending"),
         ('CANCELED', "Canceled")
     )
@@ -68,10 +68,15 @@ class Order(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     table_number = models.ForeignKey(Table, on_delete = models.SET_NULL, null = True)
     paid_price = models.PositiveIntegerField(default = 0)
+    is_paid = models.BooleanField(default= False)
 
     def __str__(self):
         return str(self.table_number)
     
+    def save(self, *args, **kwargs):
+        if self.state == "DONE":
+            self.is_paid = True
+        super().save(*args, **kwargs)
 
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order,on_delete= models.CASCADE)

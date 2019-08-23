@@ -45,6 +45,7 @@ class ReceptionConsumer(WebsocketConsumer):
             self.channel_name
         )
     
+    # send state = True to make things paid 
     def update_order(self,order_id,state):
         response_json = {'type':"update", 'success':1, 'message' : "Order Successfully updated"}
         state = str(state).lower()
@@ -59,6 +60,8 @@ class ReceptionConsumer(WebsocketConsumer):
             elif (str(state) == "pending"):
                 order.state = "PENDING"
                 order.save()
+            elif (str(state) == "PAID"):
+                order.is_paid = True
             else:
                 response_json['success'] = 0
                 response_json['message'] = "Error Updating Order state. Invalid State"
@@ -82,7 +85,7 @@ class ReceptionConsumer(WebsocketConsumer):
         orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
         print(orders)
         for order in orders:
-            json_order = {'id':order.id,'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
+            json_order = {'id':order.id,'is_paid':order.is_paid, 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
             ordered_items = OrderedItem.objects.filter(order = order)
             for ordered_item in ordered_items:
                 json_order['ordered_item']['name'].append(str(ordered_item.food_item.name))
