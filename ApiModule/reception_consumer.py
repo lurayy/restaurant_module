@@ -81,11 +81,10 @@ class ReceptionConsumer(WebsocketConsumer):
         response = {'type': 'get_order_response', 'orders':[]}
         x = int(data['to'])
         y = int(data['from'])
-        if (str(data['state'])== "All"):
-            orders = Order.objects.all().order_by('-timestamp')[x:y]
-        else:
-            orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
-            print(orders)
+        # if (str(data['state'])== "All"):
+            # orders = Order.objects.all().order_by('-timestamp')[x:y]
+        # else:
+        orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
         for order in orders:
             json_order = {'id':order.id,'is_paid':order.is_paid, 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
             ordered_items = OrderedItem.objects.filter(order = order)
@@ -94,7 +93,6 @@ class ReceptionConsumer(WebsocketConsumer):
                 json_order['ordered_item']['price'].append(str(ordered_item.food_item.price))
                 json_order['ordered_item']['quantity'].append(str(ordered_item.quantity))
             response['orders'].append(json_order)
-        print(response)
         self.send_reply_response(response)
         
 

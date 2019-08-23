@@ -18,7 +18,7 @@
           <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
             <a class="dropdown-item" href="#">All</a>
             <a class="dropdown-item" href="#">Pending</a>
-            <a class="dropdown-item" onclick="request_orders('DONE', 0,4)">Done</a>
+            <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">Done</button>
             <a class="dropdown-item" href="#">Unpaid</a>
           </div>
         </li>
@@ -60,14 +60,15 @@
             console.log(data)
             create_order_block(data['order'])
         }
-        else if (data['type']== "bulk_order")
+        else if (data['type']== "get_order_response")
         {
             console.log(data)
         }
         else
         {
             console.log(data)
-            error_popup(data['message'])
+            console.log("Error aako")
+            // error_popup(data['message'])
         }
     };
 
@@ -83,12 +84,12 @@
     
     function test()
     {
-        info = {'type': "get", 'state': "PENDING", 'to': 3, 'from': 5}
+        info = {'type': "get", 'state': "DONE", 'to': 0, 'from': 20}
         send_data(info);
     }
 
     function request_orders(state,to,from){
-        info = {'type': "get", 'state': JSON.stringify(state) , 'to': to , 'from': from}
+        info = {'type': "get", 'state': state , 'to': to , 'from': from}
         send_data(info)
     }
 
