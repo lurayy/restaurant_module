@@ -70,7 +70,7 @@ class ReceptionConsumer(WebsocketConsumer):
             response_json['message'] = "Error Updating Order state. Invalid Order Id. Cannot Retrive Order"
         if (response_json['success']):
             # since only state is updated
-            updated_order = {'id':int(order.id), 'state':str(order.state)}
+            updated_order = {'id':int(order.id), 'state':str(order.state), 'is_paid':order.is_paid}
             response_json['updated_order'] = updated_order
             self.send_group_response(response_json)
         else:
@@ -81,9 +81,10 @@ class ReceptionConsumer(WebsocketConsumer):
         response = {'type': 'get_order_response', 'orders':[]}
         x = int(data['to'])
         y = int(data['from'])
-        print(x,y)
-        orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
-        print(orders)
+        if (str(data['state'])== "All"):
+            orders = Order.objects.all().order_by('-timestamp')[x:y]
+        else:
+            orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
         for order in orders:
             json_order = {'id':order.id,'is_paid':order.is_paid, 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
             ordered_items = OrderedItem.objects.filter(order = order)
