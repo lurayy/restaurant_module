@@ -65,7 +65,8 @@
             'table_number':1,
             'name':[],
             'price':[],
-            'quantity':[]
+            'quantity':[],
+            'paid_price':0
         }
 
         order_item_test = {}
@@ -113,7 +114,8 @@
                 {
                     ordered_item['quantity'][index] -= 1
                 }
-                total_price = total_price - price           
+                total_price = total_price - price
+                ordered_item['paid_price'] = total_price           
                 document.getElementById("total_price").innerHTML = total_price;
                 document.getElementById("total_price_foot").innerHTML = total_price;
             

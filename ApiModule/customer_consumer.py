@@ -40,6 +40,7 @@ class CustomerConsumer(WebsocketConsumer):
     def save_order(self,data):
         # try:
         names = data['name']
+        # print(data)
         table = Table.objects.get(table_number = int(data['table_number']))
         order = Order.objects.create(table_number = table, paid_price = int(data['paid_price']))
         order.save()
@@ -47,10 +48,12 @@ class CustomerConsumer(WebsocketConsumer):
             item = FoodItem.objects.get(name = str(names[i]))
             ordered_item = OrderedItem.objects.create(order = order, food_item = item, quantity = int(data['quantity'][i]))
             ordered_item.save()
-        response = {'order':{'id':order.id, 'state':order.state, 'timestamp':str(order.timestamp), 'table_number':data['table_number']}, 'order_item':data}
+        # response = {'order':}, 'order_item':data, 'type':"new_order"}
+        response = {'type': 'new_order', 'order':{'id':order.id, 'state':order.state, 'timestamp':str(order.timestamp), 'table_number':data['table_number'], 'paid_price':order.paid_price, 'ordered_item': {'name':data['name'], 'price':data['price'], 'quantity':data['quantity']}}}
+        # response  = 
         self.send_group_response(response)
         # except:
-        # self.send_reply_response("An error Occured, Please try again or contant an employee.")
+        self.send_reply_response("An error Occured, Please try again or contant an employee.")
 
 
 

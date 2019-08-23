@@ -74,12 +74,16 @@ class ReceptionConsumer(WebsocketConsumer):
             self.send_reply_response(response_json)
             
 
-    # def get_order(order_type, get_by, )
+    def get_order(self, data ):
+        pass
 
     def receive(self, text_data):        
         data = json.loads(text_data)
         if (str(data["type"]) == "update"):
             self.update_order(data['order_id'],data['state'])
+        elif str(data["type"] == "get"):
+            self.get_order(data)
+            
 
 
         #get order , get_by = date, search_by_id,   
