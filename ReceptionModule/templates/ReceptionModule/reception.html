@@ -1,30 +1,32 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 <body>
 
-            
-
-  <ul id="slide-out" class="sidenav">
-    <li><div class="user-view">
-      <div class="background">
-        </div>
-        <a><span class="name">John Doe</span></a>
-        <a><span class=" email">jdandturk@gmail.com</span></a>
-       </div>
-    </li>
-    <li><div class="divider"></div></li>
-    <li><a class="waves-effect" href="#!">All</a></li>
-    <li><a class="waves-effect" href="#!">Pending</a></li>
-    <li><a class="waves-effect" href="#!">Completed</a></li>
-    </ul>
-<nav><a href="#!" class="brand-logo center">Reception</a>
-    <ul>
-      <li>
-          <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i>
-        </a>
-    </li>
-</ul>
-</nav>
-  
+<!--Navbar -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color">
+    <div class="container">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
+      aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i> Status</a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+            <a class="dropdown-item" href="#">All</a>
+            <a class="dropdown-item" href="#">Pending</a>
+            <a class="dropdown-item" onclick="request_orders('DONE', 0,20)">Done</a>
+            <a class="dropdown-item" href="#">Unpaid</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+</div>
+  </nav>
+  <!--/.Navbar -->
 
     <div class="container" >
 
@@ -37,15 +39,6 @@
 <button onclick="test()">test</button>
 
 <script>
-    // sidenav 
-    (function($){
-  $(function(){
-
-    $('.sidenav').sidenav();
-
-  }); // end of document ready
-})(jQuery); // end of jQuery name space
-  
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/reception/');
@@ -66,6 +59,10 @@
         {
             console.log(data)
             create_order_block(data['order'])
+        }
+        else if (data['type']== "bulk_order")
+        {
+            console.log(data)
         }
         else
         {
@@ -88,6 +85,11 @@
     {
         info = {'type': "get", 'state': "PENDING", 'to': 3, 'from': 5}
         send_data(info);
+    }
+
+    function request_orders(state,to,from){
+        info = {'type': "get", 'state': JSON.stringify(state) , 'to': parseint(to) , 'from': parseint(from)}
+        send_data(info)
     }
 
     function create_order_block(order)
