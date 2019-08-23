@@ -21,10 +21,6 @@
     <div class='content section col-lg-3 col-md-3'style="padding-bottom:50px;" id="billing">
         <h1 id="total_price"></h1>
         <table class="table table-sm" id="name">
-            <tr>
-                <th class="text-white text-left">Name</th>
-                <th class="text-white text-right">Price</th>
-            </tr>
         </table>   
    
     <button type="button" class="btn btn-primary" onclick="send_order()">
@@ -34,15 +30,15 @@
 </div>
 </div>
 <div class="sticky-footer d-md-none border-top">
-        <table style="table-layout: fixed; width: 100%">
-            <tr>
-                <td>
-                    <a href="#billing" class="js-scroll-trigger">What did I order?</a>
-                </td>
-                <td id="total_price_foot">
-                </td>
-            </tr>
-        </table>
+    <div class="row">
+    <div class="col-3"></div>
+<div class="col-6">
+        <span style="float: left"><a href="#billing" class="js-scroll-trigger">What did I order?</a></span>
+        <span id="total_price_foot" style="float: right">
+        </span>
+        </div>
+        <div class="col-3"></div>
+    </div>
 </div>
 
 
@@ -119,6 +115,7 @@
                 }
                 total_price = total_price - price           
                 document.getElementById("total_price").innerHTML = total_price;
+                document.getElementById("total_price_foot").innerHTML = total_price;
             
             }
         }
@@ -138,7 +135,7 @@
                     "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
                 )
                 $("#main").append(
-                    "<section id='" + food_type + "'><button>" + food_type + "</button><div><p><table class='table table-sm'><tbody id='food_data_" + food_type + "'><tr><th class='menuth' colspan='2'></th></tr></tbody></table></p></div><br><br></section>"
+                    "<section id='" + food_type + "'><div><table class='table table-sm'><tbody><tr data-target='#food_data_"+ food_type +"' aria-expanded='false' aria-controls='food_data_"+ food_type +"'><td colspan=3 aria-hidden='true'>" + food_type + "</td></tr></tbody><tbody id='food_data_" + food_type + "'></tbody></table></div></section><br>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#food_data_' + food_type).append(
@@ -185,6 +182,7 @@
         function displaycount(){
             document.getElementById("clickcount").innerHTML = count();
         }
+
 
     </script>
 </body>
