@@ -42,7 +42,6 @@
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/reception/');
-
     chatSocket.onmessage = function(e) {
         data = JSON.parse(e['data']) 
         data =data['message']
@@ -71,11 +70,9 @@
             // error_popup(data['message'])
         }
     };
-
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-
     function send_data(data)
     {
         console.log(data)
@@ -87,12 +84,10 @@
         info = {'type': "get", 'state': "DONE", 'to': 0, 'from': 20}
         send_data(info);
     }
-
     function request_orders(state,to,from){
         info = {'type': "get", 'state': state , 'to': to , 'from': from}
         send_data(info)
     }
-
     function create_order_block(order)
     {
         console.log(order)
@@ -104,36 +99,37 @@
         {
             $("#"+order.id+"_ordered_food").append('<tr><td style:"width:100%;">'+order['ordered_item']['name'][nax]+'</td><td style="text-align:center;">'+order['ordered_item']['quantity'][nax]+'</td><td style="text-align:right;">'+ order['ordered_item']['price'][nax]+'</td></tr>')
         }    
-        
+        $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
     }
-
     function get_orders(state)
     {
         console.log(state)
         //success load_data(data)
         //fail fail_popup()
     }
-
     function error_popup(message)
     {
         console.log(message)
         alert(message)
         // data load error = error_loading_data
         // state change order = error_state_change
-
     }
-
     function success_popup(message)
     {
         alert(message)
     }
-
     function update_order(order_id, state)
     {
-        info = {'type':"update",'order_id':order_id, 'state':state}
-        send_data(info)
-    }
+        var retVal = confirm("Do you want to continue ?");
+               if( retVal == true ) {
+                  info = {'type':"update",'order_id':order_id, 'state':state}
+                  send_data(info)
+                  return true;
+               } else {
+                  return false;
+               }
 
+    }
     function load_order(data) 
     {
         orders = data['orders']
@@ -142,19 +138,36 @@
             create_order_block(orders[i])
         }
     }
-
     $(document).ready(function() {
             data= {{ data | safe}}
             load_order(data);
     });
-
     $(document).ready(function(){
             $('thead').css("font-weight","bold")         
             $('thead').css("border-bottom", "1px solid #ddd")
             $('thead').css("padding-bottom","20px")
             $('.card-columns').css("padding","10px 10px 10px 10px")
-            $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
         });
+
+    function confirmchange(){
+    swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this imaginary file!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete) {
+        swal("Poof! Your imaginary file has been deleted!", {
+        icon: "success",
+        });
+    } else {
+        swal("Your imaginary file is safe!");
+    }
+    });
+    }
+
 
 </script>
 </body>
