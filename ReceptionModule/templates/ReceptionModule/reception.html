@@ -16,11 +16,13 @@
             aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-user"></i> Status</a>
           <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-            <a class="dropdown-item" href="#">All</a>
-            <a class="dropdown-item" href="#">Pending</a>
+            <button class="dropdown-item"  onclick="request_orders('PENDING',0,20)">PENDING</button>
+            <button class="dropdown-item"  onclick="request_orders('CANCELED',0,20)">CANCELED</button>
+            
             <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">Done</button>
-            <a class="dropdown-item" href="#">Unpaid</a>
-          </div>
+            <button class="dropdown-item"  onclick="request_orders('UNPAID',0,20)">UNPAID</button>
+                
+        </div>
         </li>
       </ul>
     </div>
@@ -56,16 +58,16 @@
         }
         else if (data['type'] == "new_order")
         {
-            console.log(data)
             create_order_block(data['order'])
         }
         else if (data['type']== "get_order_response")
         {
-            console.log(data)
+            clear_all_cards()
+            load_order(data)
+
         }
         else
         {
-            console.log(data)
             console.log("Error aako")
             // error_popup(data['message'])
         }
@@ -73,24 +75,28 @@
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
+
+    function clear_all_cards()
+    {
+        $("div.card").remove()
+    }
+
     function send_data(data)
     {
-        console.log(data)
         chatSocket.send(JSON.stringify(data));
     }
     
     function test()
     {
-        info = {'type': "get", 'state': "DONE", 'to': 0, 'from': 20}
-        send_data(info);
+        // clear_data()
+        request_orders("DONE",0,10)
     }
-    function request_orders(state,to,from){
-        info = {'type': "get", 'state': state , 'to': to , 'from': from}
+    function request_orders(state,start,end){
+        info = {'type': "get", 'state': state , 'start': start , 'end': end}
         send_data(info)
     }
     function create_order_block(order)
     {
-        console.log(order)
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
             '<div class="card '+ order.state +'" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'</small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
@@ -103,7 +109,6 @@
     }
     function get_orders(state)
     {
-        console.log(state)
         //success load_data(data)
         //fail fail_popup()
     }
@@ -130,6 +135,7 @@
                }
 
     }
+
     function load_order(data) 
     {
         orders = data['orders']

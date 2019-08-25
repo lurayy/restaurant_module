@@ -79,8 +79,8 @@ class ReceptionConsumer(WebsocketConsumer):
 
     def get_order(self, data ):
         response = {'type': 'get_order_response', 'orders':[]}
-        x = int(data['to'])
-        y = int(data['from'])
+        x = int(data['start'])
+        y = int(data['end'])
         # if (str(data['state'])== "All"):
             # orders = Order.objects.all().order_by('-timestamp')[x:y]
         # else:
