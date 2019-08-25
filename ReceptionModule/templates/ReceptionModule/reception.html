@@ -17,10 +17,10 @@
             <i class="fas fa-user"></i> Status</a>
           <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
             <button class="dropdown-item"  onclick="request_orders('PENDING',0,20)">PENDING</button>
-            <button class="dropdown-item"  onclick="request_orders('CANCELED',0,20)">CANCELED</button>
-            
-            <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">Done</button>
+            <button class="dropdown-item"  onclick="request_orders('CANCELED',0,20)">CANCELED</button>            
+            <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">DONE</button>
             <button class="dropdown-item"  onclick="request_orders('UNPAID',0,20)">UNPAID</button>
+            <button class="dropdown-item"  onclick="request_orders('UNPAID'&'DONE'&'CANCELED'&'PENDING',0,20)">ALL</button>
                 
         </div>
         </li>
@@ -31,14 +31,16 @@
   <!--/.Navbar -->
 
     <div class="container" >
+        <div class="text-right">
+            <button class="btn btn-danger pull-right" onclick="clear_all_cards()">Clear All</button>
 
-  
+        </div>
         <div class="card-columns" id = "dynamic_order">
     
         </div>
 </div>
 
-<button onclick="test()">test</button>
+
 
 <script>
     var chatSocket = new WebSocket(
@@ -99,13 +101,21 @@
     {
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
-            '<div class="card '+ order.state +'" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'</small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
+            '<div class="card '+ order.state +'" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'<br><span class="paid_'+order.is_paid+'"><span class="badge badge-success">Paid</span></span></small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div style="text-align:right;"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
         
         for (var nax in order['ordered_item']['name'])
         {
             $("#"+order.id+"_ordered_food").append('<tr><td style:"width:100%;">'+order['ordered_item']['name'][nax]+'</td><td style="text-align:center;">'+order['ordered_item']['quantity'][nax]+'</td><td style="text-align:right;">'+ order['ordered_item']['price'][nax]+'</td></tr>')
         }    
         $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
+        $('.CANCELED').css("background-color","rgba(241, 169, 160, 0.3)")
+        $('.DONE').css("background-color","rgba(135, 211, 124, 0.3)")
+        $('.DONE button').addClass("disabled");
+        $('.DONE a').remove();
+        $('.CANCELED a').remove();
+        $('.paid_false span').remove();
+        $('.paid_undefined span').remove();
+
     }
     function get_orders(state)
     {
