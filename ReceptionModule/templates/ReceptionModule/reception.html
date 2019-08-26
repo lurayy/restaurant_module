@@ -20,7 +20,7 @@
             <button class="dropdown-item"  onclick="request_orders('CANCELED',0,20)">CANCELED</button>            
             <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">DONE</button>
             <button class="dropdown-item"  onclick="request_orders('UNPAID',0,20)">UNPAID</button>
-            <button class="dropdown-item"  onclick="request_orders('UNPAID'&'DONE'&'CANCELED'&'PENDING',0,20)">ALL</button>
+            <button class="dropdown-item"  onclick="request_orders('ALL',0,20)">ALL</button>
                 
         </div>
         </li>
@@ -43,6 +43,9 @@
 
 
 <script>
+    
+
+
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/reception/');
@@ -66,6 +69,7 @@
         {
             clear_all_cards()
             load_order(data)
+            console.log(data)
 
         }
         else
@@ -93,15 +97,18 @@
         // clear_data()
         request_orders("DONE",0,10)
     }
+
     function request_orders(state,start,end){
         info = {'type': "get", 'state': state , 'start': start , 'end': end}
         send_data(info)
     }
+
+
     function create_order_block(order)
     {
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
-            '<div class="card '+ order.state +'" id ='+order.id +' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'<br><span class="paid_'+order.is_paid+'"><span class="badge badge-success">Paid</span></span></small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div class="row float-right" style="padding-bottom:20px;"><div class="pending_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'PENDING' + "'" + ')">PENDING</button></div><div class="done_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'Done' + "'" + ')">Done</button></div></div></div><a onclick="update_order('+order.id+',' + "'" + 'Cancel' + "'" + ')" href="#" class="close"></div>')
+            '<div class="card '+order.state+'" id ='+order.id+' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text" id="state_'+order.id+'"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'<br><span class="paid_'+order.is_paid+'"><span class="badge badge-success">Paid</span></span></small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div class="row float-right" style="padding-bottom:20px;"><div class="pending_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'PENDING' + "'" + ')">PENDING</button></div><div class="done_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'DONE' + "'" + ')">Done</button></div></div></div><a onclick="update_order('+order.id+',' + "'" + 'CANCELED' + "'" + ')" href="#" class="close"></div>')
         
         for (var nax in order['ordered_item']['name'])
         {
@@ -141,11 +148,35 @@
                if( retVal == true ) {
                   info = {'type':"update",'order_id':order_id, 'state':state}
                   send_data(info)
+                  change_state(order_id, state)
+                  change_css();
                   return true;
                } else {
                   return false;
                }
+    }
+    
+    function change_state(order_id,state)
+    {
+        $("#"+order_id).removeClass()
+        $("#"+order_id).addClass("card ")
+        //pending lai done banau 
+        $("#"+order_id).addClass(state)
+        
+    }
 
+    function change_css()
+    {
+        $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
+        $('.CANCELED').css("background-color","rgba(241, 169, 160, 0.3)")
+        $('.DONE').css("background-color","rgba(135, 211, 124, 0.3)")
+        $('.DONE a').remove();
+        $('.CANCELED a').remove();
+        $('.paid_false span').remove();
+        $('.paid_undefined span').remove();
+        $('.PENDING .pending_btn').remove();
+        $('.CANCELED .done_btn').remove();
+        $('.DONE .done_btn').remove();
     }
 
     function load_order(data) 
