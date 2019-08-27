@@ -122,6 +122,7 @@
         $('.paid_false span').remove();
         $('.paid_undefined span').remove();
         $('.PENDING .pending_btn').remove();
+        
         $('.CANCELED .done_btn').remove();
         $('.DONE .done_btn').remove();
 
@@ -174,9 +175,9 @@
         $('.CANCELED a').remove();
         $('.paid_false span').remove();
         $('.paid_undefined span').remove();
-        $('.PENDING .pending_btn').remove();
-        $('.CANCELED .done_btn').remove();
-        $('.DONE .done_btn').remove();
+        $('.PENDING .pending_btn .btn').addClass("disabled btn-blue-grey");
+        $('.CANCELED .done_btn .btn').addClass("disabled btn-blue-grey");
+        $('.DONE .done_btn .btn').addClass("disabled btn-blue-grey");
     }
 
     function load_order(data) 
