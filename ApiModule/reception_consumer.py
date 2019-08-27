@@ -2,6 +2,7 @@ from channels.generic.websocket import WebsocketConsumer
 import json 
 from asgiref.sync import async_to_sync
 from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
+from django.db.models import Q
 
 GROUP_NAME = 'reception'
 
@@ -54,14 +55,18 @@ class ReceptionConsumer(WebsocketConsumer):
             if (str(state) == "done"):
                 order.state = "DONE"
                 order.save()
-            elif (str(state) == "cancel"):
+            elif (str(state) == "canceled"):
                 order.state = "CANCELED"
                 order.save()
             elif (str(state) == "pending"):
                 order.state = "PENDING"
                 order.save()
-            elif (str(state) == "PAID"):
+            elif (str(state) == "paid"):
                 order.is_paid = True
+                order.save()
+            elif (str(state) == "unpaid"):
+                order.is_paid = False
+                order.save()
             else:
                 response_json['success'] = 0
                 response_json['message'] = "Error Updating Order state. Invalid State"
@@ -83,10 +88,12 @@ class ReceptionConsumer(WebsocketConsumer):
         y = int(data['end'])
         if (str(data['state'])== "ALL"):
             orders = Order.objects.all().order_by('-timestamp')[x:y]
+        elif (str(data['state']) == "UNPAID"):
+            orders = Order.objects.filter(~Q(state = "CANCELED")).filter(is_paid = False)
         else:
             orders = Order.objects.filter(state = str(data['state'])).order_by('-timestamp')[x:y]
         for order in orders:
-            json_order = {'id':order.id,'is_paid':order.is_paid, 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
+            json_order = {'id':order.id,'is_paid':str(order.is_paid), 'state':str(order.state), 'timestamp': str(order.timestamp), 'table_number':str(order.table_number),'paid_price':int(order.paid_price), 'ordered_item':{'name':[], 'price':[], 'quantity':[]}}
             ordered_items = OrderedItem.objects.filter(order = order)
             for ordered_item in ordered_items:
                 json_order['ordered_item']['name'].append(str(ordered_item.food_item.name))

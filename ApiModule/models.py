@@ -71,7 +71,7 @@ class Order(models.Model):
     is_paid = models.BooleanField(default= False)
 
     def __str__(self):
-        return str(self.table_number)
+        return str(self.id)
     
     def save(self, *args, **kwargs):
         if self.state == "DONE":
