@@ -108,29 +108,25 @@
     {
         var x = order['ordered_item']['name'].length
         $("#dynamic_order").append(
-            '<div class="card '+order.state+'" id ='+order.id+' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text" id="state_'+order.id+'"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'<br><span class="paid_'+order.is_paid+'"><span class="badge badge-success">Paid</span></span></small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div class="row float-right" style="padding-bottom:20px;"><div class="pending_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'PENDING' + "'" + ')">PENDING</button></div><div class="done_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'DONE' + "'" + ')">Done</button></div></div></div><a onclick="update_order('+order.id+',' + "'" + 'CANCELED' + "'" + ')" href="#" class="close"></div>')
+            '<div class="card '+order.state+'" id ='+order.id+' ><div class="card-body"><h5 class="card-title">'+order.table_number+'</h5><p class="card-text" id="state_'+order.id+'"><small class="text-muted" >'+order.state+'<br>'+Date.parse(order.timestamp)+'<br>#'+order.id +'<br><div class="ribbon paid_'+order.is_paid+'"><div class="close-ribbon"><span class="text-white">Paid</span></div></div></small></p><table style="table-layout:auto; width:100%;"><thead><td>Name</td><td style="text-align:center;">Qty</td><td style="text-align:right;">Rate</td></thead><tbody id='+order.id+'_ordered_food></tbody></table><div style="text-align:right; padding:20px 0px 20px 0px"><small class="text-muted" >Total:</small> <strong>'+order.paid_price+'</strong></div><div class="row float-right" style="padding-bottom:20px;"><div class="pending_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'PENDING' + "'" + ')">PENDING</button></div><div class="done_btn"><button type="button" class="btn btn-primary" onclick="update_order('+order.id+',' + "'" + 'DONE' + "'" + ')">Done</button></div></div></div><a onclick="update_order('+order.id+',' + "'" + 'CANCELED' + "'" + ')" href="#" class="close"></div>')
         if (order.is_paid == "False")
         {
-            $("#"+order.id).append('<button id="'+order.id+'_is_paid_button" onclick="update_order('+order.id +",'" +'PAID'+ "'" +')">PAID</button>')
+            $("#"+order.id).append('<button id="'+order.id+'_is_paid_button"  class="btn btn_primary" onclick="update_order('+order.id +",'" +'PAID'+ "'" +')">PAID</button>')
         }
         else if (order.is_paid == "True")
         {
-            $("#"+order.id).append('<button id="'+order.id+'_is_paid_button" onclick="update_order('+order.id +",'" +'UNPAID'+ "'" +')">NOT PAID</button>')    
+            $("#"+order.id).append('<button id="'+order.id+'_is_paid_button" class="btn btn_primary" onclick="update_order('+order.id +",'" +'UNPAID'+ "'" +')">NOT PAID</button>')    
         }
         
         for (var nax in order['ordered_item']['name'])
         {
             $("#"+order.id+"_ordered_food").append('<tr><td style:"width:100%;">'+order['ordered_item']['name'][nax]+'</td><td style="text-align:center;">'+order['ordered_item']['quantity'][nax]+'</td><td style="text-align:right;">'+ order['ordered_item']['price'][nax]+'</td></tr>')
         }    
-        $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
-        $('.CANCELED').css("background-color","rgba(241, 169, 160, 0.3)")
-        $('.DONE').css("background-color","rgba(135, 211, 124, 0.3)")
         $('.DONE a').remove();
         $('.CANCELED a').remove();
-        $('.paid_false span').remove();
-        $('.paid_undefined span').remove();
-        $('.PENDING .pending_btn').remove();
-        
+        $('.paid_False span').remove();
+        $('.paid_Undefined span').remove();
+        $('.PENDING .pending_btn').remove();     
         $('.CANCELED .done_btn').remove();
         $('.DONE .done_btn').remove();
 
@@ -170,12 +166,13 @@
         if (state == "PAID")
         {
             $("#"+order_id+'_is_paid_button').remove()
-            $("#"+order_id).append('<button id="'+order_id+'_is_paid_button" onclick="update_order('+order_id +",'" +'UNPAID'+ "'" +')">Not Paid</button>')  
+            $("#"+order_id).append('<button id="'+order_id+'_is_paid_button" onclick="update_order('+order_id +",'" +'UNPAID'+ "'" +')">Not Paid</button>')
+
         }
         else if  (state == "UNPAID")
         {
             $("#"+order_id+'_is_paid_button').remove()
-            $("#"+order_id).append('<button id="'+order_id+'_is_paid_button" onclick="update_order('+order_id +",'" +'PAID'+ "'" +')">'+'PAID'+'</button>')  
+            $("#"+order_id).append('<button id="'+order_id+'_is_paid_button" onclick="update_order('+order_id +",'" +'PAID'+ "'" +')">'+'PAID'+'</button>')
         }
         else
         {
@@ -189,13 +186,10 @@
 
     function change_css()
     {
-        $('.PENDING').css("background-color","rgba(247,202,24,0.2)")
-        $('.CANCELED').css("background-color","rgba(241, 169, 160, 0.3)")
-        $('.DONE').css("background-color","rgba(135, 211, 124, 0.3)")
         $('.DONE a').remove();
         $('.CANCELED a').remove();
-        $('.paid_false span').remove();
-        $('.paid_undefined span').remove();
+        $('.paid_False span').remove();
+        $('.paid_Undefined span').remove();
         $('.PENDING .pending_btn .btn').addClass("disabled btn-blue-grey");
         $('.CANCELED .done_btn .btn').addClass("disabled btn-blue-grey");
         $('.DONE .done_btn .btn').addClass("disabled btn-blue-grey");
