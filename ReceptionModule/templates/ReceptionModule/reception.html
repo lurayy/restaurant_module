@@ -11,19 +11,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-user"></i> Status</a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-            <button class="dropdown-item"  onclick="request_orders('PENDING',0,20)">PENDING</button>
-            <button class="dropdown-item"  onclick="request_orders('CANCELED',0,20)">CANCELED</button>            
-            <button class="dropdown-item"  onclick="request_orders('DONE',0,20)">DONE</button>
-            <button class="dropdown-item"  onclick="request_orders('UNPAID',0,20)">UNPAID</button>
-            <button class="dropdown-item"  onclick="request_orders('ALL',0,20)">ALL</button>
-                
-        </div>
-        </li>
+        <li class="nav-item" onclick="request_orders('PENDING',0,20)"> <a class="nav-link" href="#">PENDING
+            <span class="sr-only">(current)</span>
+          </a></li>
+          <li class="nav-item" onclick="request_orders('CANCELED',0,20)"> <a class="nav-link" href="#">CANCELED
+            <span class="sr-only">(current)</span>
+          </a></li>
+          <li class="nav-item" onclick="request_orders('DONE',0,20)"> <a class="nav-link" href="#">DONE
+            <span class="sr-only">(current)</span>
+          </a></li>
+          <li class="nav-item" onclick="request_orders('UNPAID',0,20)"> <a class="nav-link" href="#">UNPAID
+            <span class="sr-only">(current)</span>
+          </a></li>
+          <li class="nav-item" onclick="request_orders('ALL',0,20)"> <a class="nav-link" href="#">ALL
+            <span class="sr-only">(current)</span>
+          </a></li>
       </ul>
     </div>
 </div>
