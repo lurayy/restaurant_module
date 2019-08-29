@@ -104,42 +104,6 @@ margin-left: 50px;
 .sidenav a {font-size: 18px;}
 }
 
-.close-ribbon{
-position: absolute;
-top: 0;
-right: 1em;
-z-index: 1;
-color: #eee;
-font-size: 2em;
-cursor: pointer;
-width: 1.5em;
-line-height: 0.5em;
--webkit-transition: line-height 0.5s;
-transition: line-height 0.5s;
-}
-.close-ribbon:after {
-content: "";
-font-size: 0.5em;
-position: absolute;
-height: 1.2em;
-border: 1.5em solid #F44336;
-z-index: -1;
-border-top-width: 1.5em;
-border-bottom-color: transparent;
-right: 0;
--webkit-transition: height 0.5s;
-transition: height 0.5s;
-}
-.close-ribbon:before {
-content: "";
-font-size: 0.5em;
-position: absolute;
-top: -1em;
-right: 3em;
-border-width: 0 0 1em 0.7em;
-z-index: -1;
-}
-
 .PENDING {
   background-color: #FDF5D5;
 }
@@ -154,24 +118,22 @@ z-index: -1;
 
 .close-ribbon {
   position: absolute;
-  top: 45px;
+  top: 28px;
   right: 40px;
   z-index: 1;
   color: #eee;
-  font-size: 1.65em;
   width: 78px;
-  cursor: pointer;
-  line-height: 0.5em;
-  -webkit-transition: line-height 0.5s;
-  transition: line-height 0.5s;
+  line-height: 0.0em;
+  -webkit-transition: line-height 0.0s;
+  transition: line-height 0.0s;
 }
 
 .close-ribbon:after {
   content: "";
   font-size: 1.5em;
   position: absolute;
-  height: 120px;
-  border: 0.8em solid #F44336;
+  height: 65px;
+  border: 0.7em solid #61A811;
   z-index: -1;
   top: -1.15em;
   border-top-width: 1.5em;
