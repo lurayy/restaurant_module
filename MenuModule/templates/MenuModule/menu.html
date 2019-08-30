@@ -141,7 +141,7 @@
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#lg_food_data_' + food_type).append(
-                        "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +")'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td></tr>"
+                        "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +");  displaycount();'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td><td class='menutd' id='clickcount'></td></tr>"
                     )
                 }
                 $("#mainsm").append(
