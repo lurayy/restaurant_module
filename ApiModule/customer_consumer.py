@@ -49,7 +49,7 @@ class CustomerConsumer(WebsocketConsumer):
             item = FoodItem.objects.get(name = str(names[i]))
             ordered_item = OrderedItem.objects.create(order = order, food_item = item, quantity = int(data['quantity'][i]))
             ordered_item.save()
-        response = {'type': 'new_order', 'order':{'id':order.id, 'state':order.state, 'timestamp':str(order.timestamp), 'table_number':data['table_number'], 'paid_price':order.paid_price, 'ordered_item': {'name':data['name'], 'price':data['price'], 'quantity':data['quantity']}}}
+        response = {'type': 'new_order', 'order':{'id':order.id, 'state':order.state, 'is_paid':str(order.is_paid), 'timestamp':str(order.timestamp), 'table_number':data['table_number'], 'paid_price':order.paid_price, 'ordered_item': {'name':data['name'], 'price':data['price'], 'quantity':data['quantity']}}}
         self.send_group_response(response)
         self.send_reply_response("An error Occured, Please try again or contant an employee.")
 

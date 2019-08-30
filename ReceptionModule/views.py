@@ -4,12 +4,7 @@ import json
 from ApiModule.models import Order, OrderedItem
 from django.db.models import Q
 from django.core import serializers
-
-def order(request):
-    return HttpResponse("order")
-
-def menu(request):
-    pass
+from .forms import FoodTypeForm
 
 def reception(request):
     response_json = {'orders':[]} 
@@ -23,3 +18,9 @@ def reception(request):
             json_order['ordered_item']['quantity'].append(str(ordered_item.quantity))
         response_json['orders'].append(json_order)
     return render(request, 'ReceptionModule/reception.html', {'data':response_json})
+
+
+
+def food_manager(request):
+    food_type_form = FoodTypeForm()
+    return render(request, 'ReceptionModule/food_manager.html', {'food_type_form':food_type_form})

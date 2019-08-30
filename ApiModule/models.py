@@ -44,6 +44,8 @@ class R_Staff(CustomUser):
 
 class FoodType(models.Model):
     food_type = models.CharField(max_length = 200,null = True)
+    description = models.TextField(null=True)
+    image = models.ImageField(null = True, upload_to = 'foodtype')
 
     def __str__(self):
         return str(self.food_type)

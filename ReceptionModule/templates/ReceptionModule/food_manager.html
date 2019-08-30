@@ -1,0 +1,10 @@
+{% extends 'MenuModule/base.html' %} 
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ food_type_form.as_p }}
+    <button type="submit"> Update</button>
+</form>
+
+{% endblock %}
