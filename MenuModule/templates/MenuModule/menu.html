@@ -2,44 +2,44 @@
 
 <body>
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color sticky-top">
-        <a class="navbar-brand mx-auto" href="#">The Restaurant</a>
+    <a class="navbar-brand mx-auto" href="#">The Restaurant</a>
 </nav>
     <br>
-
-<div class="container">
-    <div class="row">
-            <div class="d-none d-lg-block sidebar-item col-lg-3 col-md-3">
-                    <ul style="list-style-type:none;" class="text-left">
-                        <div id="dynamic_menu">
-
-                        </div>
-                    </ul>
+    <div class="container">
+       <div class="row">
+          <div class="d-none d-lg-block sidebar-item col-lg-3 col-md-3">
+             <ul style="list-style-type:none;" class="text-left">
+                <div id="dynamic_menu">
                 </div>
-    <div class="content section col-lg-6 col-md-6" id="main">
-
+             </ul>
+          </div>
+          <div class="content section col-lg-6 col-md-6">
+            <div id="mainlg" class="d-none d-lg-block"></div>
+              <div id="accordion" class="d-lg-none">
+                  <div id="mainsm"></div>
+              </div>
+          </div>
+          <div class='content section col-lg-3 col-md-6'style="padding-bottom:50px;" id="billing">
+             <h1 id="total_price"></h1>
+             <table class="table table-sm" id="name">
+             </table>
+             <button type="button" class="btn btn-primary" onclick="send_order()">
+             Order
+             </button>
+          </div>
+       </div>      
     </div>
-    <div class='content section col-lg-3 col-md-3'style="padding-bottom:50px;" id="billing">
-        <h1 id="total_price"></h1>
-        <table class="table table-sm" id="name">
-        </table>   
-   
-    <button type="button" class="btn btn-primary" onclick="send_order()">
-        Order
-    </button>
-</div>
-</div>
-</div>
-<div class="sticky-footer d-md-none border-top">
-    <div class="row">
-    <div class="col-3"></div>
-<div class="col-6">
-        <span style="float: left"><a href="#billing" class="js-scroll-trigger">What did I order?</a></span>
-        <span id="total_price_foot" style="float: right">
-        </span>
-        </div>
-        <div class="col-3"></div>
+    <div class="sticky-footer d-md-none border-top">
+       <div class="row">
+          <div class="col-3"></div>
+          <div class="col-6">
+             <span style="float: left"><a href="#billing" class="js-scroll-trigger">What did I order?</a></span>
+             <span id="total_price_foot" style="float: right">
+             </span>
+          </div>
+          <div class="col-3"></div>
+       </div>
     </div>
-</div>
 
 
     <script>
@@ -136,11 +136,19 @@
                 $("#dynamic_menu").append(
                     "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
                 )
-                $("#main").append(
-                    "<section id='" + food_type + "'><div><table class='table table-sm'><tbody><tr data-target='#food_data_"+ food_type +"' aria-expanded='false' aria-controls='food_data_"+ food_type +"'><td colspan=3 aria-hidden='true'>" + food_type + "</td></tr></tbody><tbody id='food_data_" + food_type + "'></tbody></table></div></section><br>"
+                $("#mainlg").append(
+                    "<section id='" + food_type + "'><table class='table table-sm'><tbody id='lg_food_data_" + food_type + "'><tr><th class='' colspan='2'>" + food_type + "</th></tr></tbody></table><br><br></section>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
-                    $('#food_data_' + food_type).append(
+                    $('#lg_food_data_' + food_type).append(
+                        "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +")'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td></tr>"
+                    )
+                }
+                $("#mainsm").append(
+                    "<div class='card'><div id='head_"+ food_type +"'><h5 class='mb-0'><button class='btn btn-link collapsed' data-toggle='collapse' data-target='#data_"+ food_type +"' aria-expanded='true' aria-controls='data_"+ food_type +"' >"+food_type+"</button></h5></div><div id='data_"+ food_type +"' class='collapse' aria-labelledby='head_"+ food_type +"' data-parent='#accordion'><div class='card-body'><table class='table table-sm'><tbody id='sm_food_data_" + food_type + "'></tbody></table></div></div></div></section><br>"
+                );
+                for (i = 0; i < data[food_type].name.length; i++) {
+                    $('#sm_food_data_' + food_type).append(
                         "<tr class='list-group-item-action text-left' scope='row' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +"); displaycount();'><td class='menutd'>" + data[food_type].name[i] + "</td><td class='text-right menutd'>Rs." + data[food_type].price[i] + "</td><td class='menutd' id='clickcount'></td></tr>"
                     )
                 }
