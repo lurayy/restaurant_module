@@ -5,6 +5,7 @@ from ApiModule.models import Order, OrderedItem
 from django.db.models import Q
 from django.core import serializers
 from .forms import FoodTypeForm
+from ApiModule.models import FoodItem, FoodType
 
 def reception(request):
     response_json = {'orders':[]} 
@@ -22,9 +23,27 @@ def reception(request):
 
 
 def food_manager(request):
-    if request.method == 'POST':
-        food_type_form = FoodTypeForm(request.POST)
-        return HttpResponse("werasdf")
+    if request.method == "POST":
+        json_str = request.body.decode(encoding='UTF-8')
+        data = json.loads(json_str)
+        food_item = FoodItem.objects.get(name = str(data['food_name']))
+        if (int(data['value']) == 0 ):
+            food_item.is_active = False
+            food_item.save()
+        else:
+            food_item.is_active = True
+            food_item.save()
+        return HttpResponse("Good boi")
     else:
-        food_type_form = FoodTypeForm()
-        return render(request, 'ReceptionModule/food_manager.html', {'food_type_form':food_type_form})
+        Food = FoodItem.objects.all()
+        food_list = {}
+        Foodtype = FoodType.objects.all()
+        for typename in Foodtype:
+            food_list[str(typename.food_type)] = {'name':[], 'price':[], 'is_active':[]}
+        for f in Food :
+            food_list[str(f.food_type)]['name'].append(str(f.name))
+            food_list[str(f.food_type)]['price'].append(str(f.price))
+            food_list[str(f.food_type)]['is_active'].append(int(f.is_active))
+            
+        return render(request, 'ReceptionModule/food_manager.html', {'data':json.dumps(food_list)})
+

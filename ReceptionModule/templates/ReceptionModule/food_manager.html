@@ -1,4 +1,102 @@
-{% extends 'MenuModule/base.html' %} 
-{% block content %}
+{% extends 'MenuModule/base.html' %} {% block content %}
 
+<body>
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color sticky-top">
+    <a class="navbar-brand mx-auto" href="#">Food Manager</a>
+</nav>
+    <br>
+    <div class="container">
+       <div class="row">
+          <div class="d-none d-lg-block sidebar-item col-lg-3 col-md-3">
+             <ul style="list-style-type:none;" class="text-left">
+                <div id="dynamic_menu">
+                </div>
+             </ul>
+          </div>
+          <div class="content section col-lg-6 col-md-6">
+            <div id="mainlg" class="d-none d-lg-block"></div>
+              <div id="accordion" class="d-lg-none">
+                  <div id="mainsm"></div>
+              </div>
+          </div>
+        </div>      
+    </div>
+<script>
+        $(document).ready(function() {
+            create_menu()
+        });
+
+
+        function create_menu() {
+            data = {{ data | safe }}
+            outputData(data);
+        }
+
+        function outputData(data) {
+            for (var food_type in data) {
+                $("#dynamic_menu").append(
+                    "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
+                )
+                $("#mainlg").append(
+                    "<section id='" + food_type + "'><table class='table table-sm'><tbody id='lg_food_data_" + food_type + "'><tr><th class='' colspan='2'>" + food_type + "</th></tr></tbody></table><br><br></section>"
+                );
+                for (i = 0; i < data[food_type].name.length; i++) {
+                    if(data[food_type].is_active[i])
+                    {
+                        $('#lg_food_data_' + food_type).append(
+                        "<tr class='list-group-item-action text-left table-success' scope='row'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td><td><button class = 'btn btn-danger' onclick='change_active_status(" + '"' + data[food_type].name[i] + '"' + ",0)'>Make Unavaible</button></td></tr>"
+                        )
+                    }
+                    else
+                    {
+                        console.log()
+                        $('#lg_food_data_' + food_type).append(
+                        "<tr class='list-group-item-action text-left table-danger' scope='row'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td><td><button class= 'btn btn-success' onclick = 'change_active_status(" + '"' + data[food_type].name[i] + '"' + ",1)'>Make Avaible</button></td></tr>"
+                        )
+                    }
+                    
+                }
+                
+            }
+        }
+
+        function popup(message){
+            alert(message)
+        }
+  
+        function change_active_status(food_name, value)
+        {
+            info = {'type':"update",'food_name':food_name, 'value':value}
+            console.log(food_name, value)
+            var xhttp = new XMLHttpRequest();
+            $.ajax ({
+                type: 'POST',
+                url: '/reception/foodmanager',
+                data: JSON.stringify(info),
+                success: function(data){
+                    location.reload();        
+            }
+            }); 
+        }
+
+        // function change_active_status(food_name, value)
+        // {
+        //     var xhttp = new XMLHttpRequest();
+        //     url = location.pathname;
+        //     console.log(url)
+        //     info = {'type':"update",'food_name':food_name, 'value':value}
+        //     $.ajax ({
+        //         'type': 'POST',
+        //         'url': url,
+        //         'contentType': 'application/json',
+        //         'dataType': 'json',
+        //         'success': function(e){
+        //             location.reload();
+        //         }
+        //     }); 
+
+        // }
+
+    </script>
+</body>
 {% endblock %}
