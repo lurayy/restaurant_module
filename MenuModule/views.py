@@ -9,10 +9,12 @@ def menu(request):
     food_list = {}
     Foodtype = FoodType.objects.all()
     for typename in Foodtype:
-        food_list[str(typename.food_type)] = {'name':[], 'price':[]}
+        food_list[str(typename.food_type)] = {'name':[], 'price':[],'image_url':[],'description':[]}
     for f in Food :
         if(f.is_active):
             food_list[str(f.food_type)]['name'].append(str(f.name))
+            food_list[str(f.food_type)]['image_url'].append(str(f.image))
+            food_list[str(f.food_type)]['description'].append(str(f.description))
             food_list[str(f.food_type)]['price'].append(str(f.price))
     return render(request, 'MenuModule/menu.html', {'data':json.dumps(food_list)})
 

@@ -57,6 +57,7 @@
             };
         $(document).ready(function() {
             create_menu()
+
         });
 
 
@@ -132,6 +133,7 @@
         }
 
         function outputData(data) {
+            console.log(data)
             for (var food_type in data) {
                 $("#dynamic_menu").append(
                     "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
