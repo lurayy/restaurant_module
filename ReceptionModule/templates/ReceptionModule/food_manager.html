@@ -14,10 +14,7 @@
              </ul>
           </div>
           <div class="content section col-lg-6 col-md-6">
-            <div id="mainlg" class="d-none d-lg-block"></div>
-              <div id="accordion" class="d-lg-none">
-                  <div id="mainsm"></div>
-              </div>
+            <div id="mainlg"></div>
           </div>
         </div>      
     </div>
@@ -38,20 +35,20 @@
                     "<li><a href='#" + food_type + "' >" + food_type + "</a></li>"
                 )
                 $("#mainlg").append(
-                    "<section id='" + food_type + "'><table class='table table-sm'><tbody id='lg_food_data_" + food_type + "'><tr><th class='' colspan='2'>" + food_type + "</th></tr></tbody></table><br><br></section>"
+                    "<section id='" + food_type + "'><table class='table table-sm' style='width:100%'><tbody id='lg_food_data_" + food_type + "'><tr><th class='' colspan='3'>" + food_type + "</th></tr></tbody></table><br><br></section>"
                 );
                 for (i = 0; i < data[food_type].name.length; i++) {
                     if(data[food_type].is_active[i])
                     {
                         $('#lg_food_data_' + food_type).append(
-                        "<tr class='list-group-item-action text-left table-success' scope='row'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td><td><button class = 'btn btn-danger' onclick='change_active_status(" + '"' + data[food_type].name[i] + '"' + ",0)'>Make Unavaible</button></td></tr>"
+                        "<tr class='list-group-item-action text-left table-success' scope='row'><td style='width:50%'>" + data[food_type].name[i] + "</td><td class='text-left'>Rs." + data[food_type].price[i] + "</td><td class='text-right'><button class = 'btn btn-success btn-sm' onclick='change_active_status(" + '"' + data[food_type].name[i] + '"' + ",0)'>On</button></td></tr>"
                         )
                     }
                     else
                     {
                         console.log()
                         $('#lg_food_data_' + food_type).append(
-                        "<tr class='list-group-item-action text-left table-danger' scope='row'><td>" + data[food_type].name[i] + "</td><td class='text-right'>Rs." + data[food_type].price[i] + "</td><td><button class= 'btn btn-success' onclick = 'change_active_status(" + '"' + data[food_type].name[i] + '"' + ",1)'>Make Avaible</button></td></tr>"
+                        "<tr class='list-group-item-action text-left table-danger' scope='row'><td style='width:50%'>" + data[food_type].name[i] + "</td><td class='text-left'>Rs." + data[food_type].price[i] + "</td><td class='text-right'><button class= 'btn btn-danger btn-sm' onclick = 'change_active_status(" + '"' + data[food_type].name[i] + '"' + ",1)'>Off</button></td></tr>"
                         )
                     }
                     
