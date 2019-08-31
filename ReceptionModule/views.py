@@ -22,5 +22,9 @@ def reception(request):
 
 
 def food_manager(request):
-    food_type_form = FoodTypeForm()
-    return render(request, 'ReceptionModule/food_manager.html', {'food_type_form':food_type_form})
+    if request.method == 'POST':
+        food_type_form = FoodTypeForm(request.POST)
+        return HttpResponse("werasdf")
+    else:
+        food_type_form = FoodTypeForm()
+        return render(request, 'ReceptionModule/food_manager.html', {'food_type_form':food_type_form})

@@ -42,23 +42,33 @@ class R_Staff(CustomUser):
         self.user.is_rstaff = True
         super().save(*args, **kwargs)
 
+
+def foodtype_directory_path(instance, filename):
+    return 'foodtype/type_{0}/{0}'.format(instance.name)
+
 class FoodType(models.Model):
     food_type = models.CharField(max_length = 200,null = True)
     description = models.TextField(null=True)
-    image = models.ImageField(null = True, upload_to = 'foodtype')
+    image = models.ImageField(null = True, upload_to = foodtype_directory_path)
 
     def __str__(self):
         return str(self.food_type)
 
+
+def user_directory_path(instance, filename):
+    return 'fooditem/food_{0}/{0}'.format(instance.name)
 
 class FoodItem(models.Model):
     name = models.CharField(max_length = 200)
     food_type = models.ForeignKey(FoodType, on_delete = models.CASCADE,null = True)
     price = models.PositiveIntegerField(default = 100)
     is_active = models.BooleanField(default= True)
+    image = models.ImageField(null= True, upload_to = user_directory_path)
+    description = models.TextField(null = True)
 
     def __str__(self):
         return self.name
+
 
 class Order(models.Model):
     STATES = (
