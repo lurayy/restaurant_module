@@ -142,7 +142,7 @@
                 )
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#lg_food_data_' + food_type).append(
-                        "<div class='card card-cascade narrower'><div class='view view-cascade overlay'><img src='{{ MEDIA_URL}}/"+data[food_type].image_url[i]+"' class='card-img-top' alt='Card image cap'> <a><div class='mask rgba-white-slight'></div></a></div><div class='card-body card-body-cascade' ><h5 class='pink-text pb-2 pt-1'><i class='fas fa-utensils'></i> Culinary</h5><h4 class='font-weight-bold card-title'>" + data[food_type].name[i] + "</h4><p class='card-text'>Rs." + data[food_type].price[i] + "<br>"+ data[food_type].description[i]+"</p><button class='btn btn-unique' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +");'>Add</button></div></div>"
+                        "<div class='card card-cascade narrower'><div class='view view-cascade overlay'><img src='{{ MEDIA_URL}}/"+data[food_type].image_url[i]+"' class='card-img-top' onerror=this.src='http://lorempixel.com/200/200/food/"+ [i] +"' alt='not found'> <a><div class='mask rgba-white-slight'></div></a></div><div class='card-body card-body-cascade' ><h5 class='pink-text pb-2 pt-1'><i class='fas fa-utensils'></i> Culinary</h5><h4 class='font-weight-bold card-title'>" + data[food_type].name[i] + "</h4><p class='card-text'>Rs." + data[food_type].price[i] + "<br>"+ data[food_type].description[i]+"</p><button class='btn btn-unique' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +");'>Add</button></div></div>"
                     )
                 }
                 $("#mainsm").append(
