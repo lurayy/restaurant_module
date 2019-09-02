@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('ApiModule.urls')),
     path('reception/', include('ReceptionModule.urls')),
-    path('menu/', include('MenuModule.urls'))
+    path('', include('MenuModule.urls'))
 ]
 
 if settings.DEBUG:
