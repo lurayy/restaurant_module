@@ -7,25 +7,34 @@
     <br>
     <div class="container">
        <div class="row">
-          <div class=" col-lg-9 col-md-9 d-none d-lg-block">
+          <div class="col-lg-9 col-md-9">
+              <div class="d-none d-lg-block">
             <ul id="mainlg" class="nav nav-tabs" role="tablist">
 
             </ul>
             <div id="tab-contents" class="tab-content" style="padding-top:50px;" >
 
             </div>
+            </div>
               <div id="accordion" class="d-lg-none">
                   <div id="mainsm"></div>
               </div>
           </div>
-          <div class='content section col-lg-3 col-md-6'style="padding-bottom:50px;" id="billing">
-             <h1 id="total_price"></h1>
+          <div class='col-lg-3 col-md-3' id="billing">
+            <div class="make-me-sticky">
+              <div class="card text-white bg-info mb-3">
+            <div class="card-header">Billing</div>
+            <div class="card-body">
+             <h1 id="total_price">0</h1>
              <table class="table table-sm" id="name">
              </table>
              <button type="button" class="btn btn-primary" onclick="send_order()">
              Order
              </button>
+            </div>
           </div>
+        </div>
+        </div>
        </div>      
     </div>
     <div class="sticky-footer d-md-none border-top">
@@ -88,7 +97,7 @@
             order_item_id += 1
             total_price += parseInt(price)
             $("#name").append(
-                '<tr scope="row" class="list-group-item-action text-left" onclick="remove(' + order_item_id + ','+ "'" + name +"'" +')" id = "' + order_item_id + '" ><td>' + name + '</td><td style="width: 10px;" class="text-right">Rs.' + price + '</td></tr>'
+                '<tr scope="row" class="list-group-item-action text-left text-white" onclick="remove(' + order_item_id + ','+ "'" + name +"'" +')" id = "' + order_item_id + '" ><td>' + name + '</td><td style="width: 10px;" class="text-right">Rs.' + price + '</td></tr>'
             );
             document.getElementById("total_price").innerHTML = total_price;
 

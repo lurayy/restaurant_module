@@ -144,18 +144,10 @@ margin-left: 50px;
   margin-right: 4%;
 }
 
-.tabs-orange {
-  background-color: #f57c00!important;
-}
-
-.classic-tabs .nav {
-  white-space: nowrap;
-  overflow-x: auto;
-  position: relative;
-  border-radius: .3rem .3rem 0 0;
-}
-
-@media (min-width: 62rem)
-.classic-tabs .nav {
-    overflow-x: hidden;
+.make-me-sticky {
+  position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+    
+  padding: 70px 0px;
 }
