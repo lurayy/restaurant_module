@@ -6,7 +6,7 @@ import uuid
 class CustomUser(AbstractUser):
     is_rmanager = models.BooleanField(default=False)
     is_rstaff = models.BooleanField(default=True)
-
+    phone_number = models.CharField(blank = True, max_length  =  14)
     uuid = models.UUIDField(unique = True, default = uuid.uuid4)
     
     def __str__(self):
@@ -19,28 +19,6 @@ class Table(models.Model):
     
     def __str__(self):
         return str(self.table_number)    
-
-
-class R_Manager(CustomUser):
-    REQUIRED_FIELDS = ('user',)
-    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "R_Manager", unique = True)
-    contact_number = models.CharField(blank = True, max_length  =  14)
-
-    def save(self, *args, **kwargs):
-        self.user.is_rmanager = True
-        self.user.is_rstaff = True
-        super().save(*args, **kwargs)
-
-
-class R_Staff(CustomUser):
-    REQUIRED_FIELDS = ('user',)
-    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE, primary_key = True, related_name = "R_Staff", unique = True)
-    contact_number = models.CharField(blank = True, max_length  =  14)
-
-    def save(self, *args, **kwargs):
-        self.user.is_rmanager = False
-        self.user.is_rstaff = True
-        super().save(*args, **kwargs)
 
 
 def foodtype_directory_path(instance, filename):
