@@ -44,6 +44,5 @@ def food_manager(request):
             food_list[str(f.food_type)]['name'].append(str(f.name))
             food_list[str(f.food_type)]['price'].append(str(f.price))
             food_list[str(f.food_type)]['is_active'].append(int(f.is_active))
-            
         return render(request, 'ReceptionModule/food_manager.html', {'data':json.dumps(food_list)})
 
