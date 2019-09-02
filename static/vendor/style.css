@@ -138,3 +138,24 @@ margin-left: 50px;
   -webkit-transition: height 0.5s;
   transition: height 0.5s;
 }
+
+.card.card-cascade.narrower .view.view-cascade {
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+.tabs-orange {
+  background-color: #f57c00!important;
+}
+
+.classic-tabs .nav {
+  white-space: nowrap;
+  overflow-x: auto;
+  position: relative;
+  border-radius: .3rem .3rem 0 0;
+}
+
+@media (min-width: 62rem)
+.classic-tabs .nav {
+    overflow-x: hidden;
+}
