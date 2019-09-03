@@ -2,7 +2,6 @@ from channels.generic.websocket import WebsocketConsumer
 import json 
 from asgiref.sync import async_to_sync
 from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser, Table
-
 GROUP_NAME = 'reception'
 
 
@@ -22,12 +21,13 @@ class CustomerConsumer(WebsocketConsumer):
         async_to_sync (self.send(text_data = json.dumps({
             'message':message
         })))
-    
+
     def connect(self):
         print("Connecting Incommnig")
         self.accept()
         print(self.channel_name)
         print("Connection Accepted")
+    
     
     def disconnect(self, close_code):
         self.close()

@@ -3,6 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 GROUP_NAME = 'reception'
 
@@ -16,7 +17,7 @@ class ReceptionConsumer(WebsocketConsumer):
                 'message': response,
             }
         )
-
+    
     def staff_message(self,event):
         print("send staff")
         message = event['message']
@@ -24,7 +25,7 @@ class ReceptionConsumer(WebsocketConsumer):
         async_to_sync (self.send(text_data = json.dumps({
             'message':message
         })))
-
+   
     def send_reply_response(self,message):
         async_to_sync (self.send(text_data = json.dumps({
             'message':message
@@ -81,7 +82,6 @@ class ReceptionConsumer(WebsocketConsumer):
         else:
             self.send_reply_response(response_json)
             
-
     def get_order(self, data ):
         response = {'type': 'get_order_response', 'orders':[]}
         x = int(data['start'])
@@ -102,7 +102,6 @@ class ReceptionConsumer(WebsocketConsumer):
             response['orders'].append(json_order)
         self.send_reply_response(response)
         
-
     def receive(self, text_data):        
         data = json.loads(text_data)
         if (str(data["type"]) == "update"):
@@ -205,4 +204,3 @@ class ReceptionConsumer(WebsocketConsumer):
     #     message = text_data_json['message']
     #     self.send(text_data= json.dumps({'message': message}))
         
-

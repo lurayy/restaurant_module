@@ -9,7 +9,7 @@ def menu(request):
     food_list = {}
     Foodtype = FoodType.objects.all()
     for typename in Foodtype:
-        food_list[str(typename.food_type)] = {'name':[], 'price':[],'image_url':[],'description':[], 'image_url':str(typename.image)}
+        food_list[str(typename.food_type)] = {'name':[], 'price':[],'image_url':[],'description':[], 'food_type_image_url':str(typename.image)}
 
     for f in Food :
         if(f.is_active):
