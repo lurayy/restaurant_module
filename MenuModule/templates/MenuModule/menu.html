@@ -1,52 +1,53 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
 
 <body>
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color sticky-top">
-    <a class="navbar-brand mx-auto" href="#">The Restaurant</a>
-</nav>
+    <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color sticky-top">
+        <a class="navbar-brand mx-auto" href="#">The Restaurant</a>
+    </nav>
     <br>
     <div class="container">
-       <div class="row">
-          <div class="col-lg-9 col-md-9">
-              <div class="d-none d-lg-block">
-            <ul id="mainlg" class="nav nav-tabs" role="tablist">
-
-            </ul>
-            <div id="tab-contents" class="tab-content" style="padding-top:50px;" >
-
+        <div class="row">
+            <div class="col-lg-9 col-md-9">
+                <div class="d-none d-lg-block app">
+                    <ul id="mainlg" class="hs" role="tablist">
+    
+                    </ul>
+                    <div id="tab-contents" class="tab-content" style="padding-top:50px;">
+    
+                    </div>
+                </div>
+                <div id="accordion" class="d-lg-none">
+                    <div id="mainsm"></div>
+                </div>
             </div>
+            <div class='col-lg-3 col-md-3' id="billing">
+                <div class="make-me-sticky">
+                    <div class="card text-white bg-info mb-3">
+                        <div class="card-header">Billing</div>
+                        <div class="card-body">
+                            <h1 id="total_price">0</h1>
+                            <table class="table table-sm" id="name">
+                            </table>
+                            <button type="button" class="btn btn-primary" onclick="send_order()">
+                                Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-              <div id="accordion" class="d-lg-none">
-                  <div id="mainsm"></div>
-              </div>
-          </div>
-          <div class='col-lg-3 col-md-3' id="billing">
-            <div class="make-me-sticky">
-              <div class="card text-white bg-info mb-3">
-            <div class="card-header">Billing</div>
-            <div class="card-body">
-             <h1 id="total_price">0</h1>
-             <table class="table table-sm" id="name">
-             </table>
-             <button type="button" class="btn btn-primary" onclick="send_order()">
-             Order
-             </button>
-            </div>
-          </div>
         </div>
-        </div>
-       </div>      
     </div>
+
     <div class="sticky-footer d-md-none border-top">
-       <div class="row">
-          <div class="col-3"></div>
-          <div class="col-6">
-             <span style="float: left"><a href="#billing" class="js-scroll-trigger">What did I order?</a></span>
-             <span id="total_price_foot" style="float: right">
-             </span>
-          </div>
-          <div class="col-3"></div>
-       </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <span style="float: left"><a href="#billing" class="js-scroll-trigger">What did I order?</a></span>
+                <span id="total_price_foot" style="float: right">
+                 </span>
+            </div>
+            <div class="col-3"></div>
+        </div>
     </div>
 
 
@@ -144,7 +145,7 @@
             console.log(data)
             for (var food_type in data) {
                 $("#mainlg").append(
-                    "<li class='nav-item'><a class='nav-link' id='" + food_type + "-tab' data-toggle='tab' href='#" + food_type + "' role='tab' aria-controls='" + food_type + "' aria-selected='true'>" + food_type + "</a></li>"
+                    "<li class='item'><div class='text-center'><a id='" + food_type + "-tab' data-toggle='tab' href='#" + food_type + "' role='tab' aria-controls='" + food_type + "' aria-selected='true'><img src='https://img.icons8.com/cotton/64/000000/hamburger.png'>" + food_type + "</a></div></li>"
                 );
                 $("#tab-contents").append(
                     "<div class='tab-pane fade' id='" + food_type + "' role='tabpanel' aria-labelledby='" + food_type + "-tab'><div class='card-columns' id='lg_food_data_" + food_type + "'></div></div>"
@@ -175,7 +176,6 @@
             });
             $('.menutd').css("padding","10px 5px 10px 0px")
             $('.menuth').css("padding","5px 0px 5px 0px")
-            $('a').css("text-decoration","none")
             $('#MoMo').addClass('show active')
             $('#MoMo-tab').addClass('active')
             $()
