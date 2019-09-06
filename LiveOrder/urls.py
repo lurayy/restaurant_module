@@ -19,7 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', include('AdminModule.urls')),
+    path('super_admin_only/', admin.site.urls),
+    path('user/', include('AdminModule.user_urls')),
     path('api/',include('ApiModule.urls')),
     path('reception/', include('ReceptionModule.urls')),
     path('', include('MenuModule.urls'))

@@ -7,10 +7,13 @@ class CustomUser(AbstractUser):
     is_rmanager = models.BooleanField(default=False)
     is_rstaff = models.BooleanField(default=True)
     phone_number = models.CharField(blank = True, max_length  =  14)
-    uuid = models.UUIDField(unique = True, default = uuid.uuid4)
-    
+    emp_id = models.UUIDField(unique = True, default = uuid.uuid4().hex, max_length=7)
+
     def __str__(self):
         return self.first_name + self.last_name
+
+    def get_emp_id(self):
+        return (str(self.emp_id)[5:11].upper())
 
 
 class Table(models.Model):

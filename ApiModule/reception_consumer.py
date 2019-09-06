@@ -32,6 +32,10 @@ class ReceptionConsumer(WebsocketConsumer):
         })))
     
     def connect(self):
+        self.user = self.scope["user"]
+        if(self.user.is_authenticated):
+            print("loged in ")
+        print(self.user)
         async_to_sync (self.channel_layer.group_add)(
             GROUP_NAME,
             self.channel_name
@@ -40,6 +44,7 @@ class ReceptionConsumer(WebsocketConsumer):
         self.accept()
         print(self.channel_name)
         print("Connection Accepted")
+
     
     def disconnect(self, close_code):
         async_to_sync (self.channel_layer.group_discard)(
