@@ -33,7 +33,7 @@ def login_view(request):
                     login(request,user)
                     return HttpResponseRedirect('/reception')
                 else:
-                    return HttpResponseRedirect('login')           
+                    return HttpResponseRedirect('login')   
         else:
             form = LoginForm()
             return render (request, 'ReceptionModule/login.html',{'form':form})
@@ -45,7 +45,6 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
-
 @user_passes_test(check,login_url='/')
 def user_registration(request):
     if request.method == 'POST':
@@ -54,16 +53,18 @@ def user_registration(request):
             user = user_form.save(commit=False)
             user.save()
             print(user)
+            print("user created")
             return HttpResponseRedirect('/admin')
         else:
-            messages.error(request,"Some Error On the Form.")
-            return HttpResponse(request,'AdminModule/staff_id_form.html')
+            print("error on the forms")
+            return render(request, 'AdminModule/staff_id_form.html', { 'user_form':user_form})
     else:
         user_form = UserForm()
         return render(request, 'AdminModule/staff_id_form.html', { 'user_form':user_form})
 
 
-def user_manager(request):
+@user_passes_test(check,login_url='/')
+def user_manage(request):
     return render(request, 'AdminModule/admin_panel.html')        
 
 
