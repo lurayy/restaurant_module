@@ -17,14 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.views.generic.base import TemplateView
 urlpatterns = [
     path('admin/', include('AdminModule.urls')),
     path('super_admin_only/', admin.site.urls),
     path('user/', include('AdminModule.user_urls')),
     path('api/',include('ApiModule.urls')),
     path('reception/', include('ReceptionModule.urls')),
-    path('', include('MenuModule.urls'))
+    path('', include('MenuModule.urls')),
+    path('404',TemplateView.as_view(template_name='AdminModule/404.html'),name= "404 page")
+    
 ]
 
 if settings.DEBUG:

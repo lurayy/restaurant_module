@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .forms import UserForm, LoginForm
-from ApiModule.models import CustomUser
+from ApiModule.models import CustomUser, StaffPosition
 import json
 from django.contrib.auth import authenticate, login, logout
 
@@ -45,7 +45,7 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
-@user_passes_test(check,login_url='/')
+@user_passes_test(check,login_url='/404')
 def user_registration(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -63,11 +63,30 @@ def user_registration(request):
         return render(request, 'AdminModule/staff_id_form.html', { 'user_form':user_form})
 
 
-@user_passes_test(check,login_url='/')
-def user_manage(request):
-    return render(request, 'AdminModule/admin_panel.html')        
+@user_passes_test(check,login_url='/404')
+def manage_user(request):
+    if request.method == "POST":
+        pass
+    else:
+        response = {'id':[],'name':[], 'position':[], 'phone_number':[],'position_all':[]}
+        users = CustomUser.objects.all().filter(is_superuser = False)
+        for user in users:
+            response['id'].append(str(user.emp_id))
+            response['name'].append(str(user.first_name +" "+ user.last_name))
+            response['position'].append(str(user.position))
+            response['phone_number'].append(str(user.phone_number))
+        for pos in (StaffPosition.objects.all()):
+            response['position_all'].append(str(pos))
+        return render(request, 'AdminModule/manage_user.html',{'data':response})        
 
 
-@user_passes_test(check, login_url="/")
+def user_profile(request,id):
+    try:
+        user = CustomUser.objects.get(emp_id = str(id), is_superuser = False )
+    except:
+        return HttpResponseRedirect('/404')
+    return render(request, 'AdminModule/edit_profile.html')
+
+@user_passes_test(check, login_url="/404")
 def admin_panel(request):
     return render(request, 'AdminModule/admin_panel.html')

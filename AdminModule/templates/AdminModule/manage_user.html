@@ -1,0 +1,97 @@
+{% extends 'MenuModule/base.html' %} {% block content %}
+
+
+<div class="container">
+    
+    <label for="book_name">Search User By Name:</label>
+    <input type="text" id="book_name" required autofocus placeholder="First Name">    
+    <button type="button" class="btn btn-primary" onclick="search_user()">Search</button>
+    
+    <br>
+    
+</div>
+
+<div class="container">
+    <div id="order_table" class="table-responsive">
+            <hr>
+        <div class="card shadow">
+            <div class="card-header border-0">
+                <h3 class="mb-0">Show By Position :</h3>  <select id = "select_post" onchange="show_only_of_position(this.value)">
+
+                </select>   
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-hover">
+                    <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Phone number</th>
+                    <th scope="col"></th>
+                    </tr>
+                <tbody id="users">
+                </tbody>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+
+<script>
+
+
+function output_data(data)
+{
+    $("#select_post").append(
+            '<option value = "All">'+"ALL"+'</option>'
+        )
+    y = y = data['position_all'].length;
+        while (y) {
+        y = y -1;
+        $("#select_post").append(
+            '<option value = '+data['position_all'][y]+'>'+data['position_all'][y]+'</option>'
+        )
+   }
+    show_only_of_position("All")  
+}
+
+function show_only_of_position(position)
+{
+    data = {{ data | safe }}
+    y = data['id'].length;
+    $("#users").empty()
+    while(y)
+    {
+        y = y-1;
+        if(position == data['position_all'][y] || position == "All")
+        {
+            $("#users").append(
+                '<tr data-href="'+data['id'][y]+'" class="table-row clickable-row"><td>'+data['name'][y]+'</td><td>'+data['position'][y]+'</td><td>'+data['phone_number'][y]+'</td></tr>'
+            )
+        }
+        
+    }
+    $('*[data-href]').on('click', function() {
+        get_user_info($(this).data("href")) ;
+    });
+}
+
+function get_user_info(id)
+{
+    location = "/admin/manage_user/"+id
+}
+
+$(document).ready(); { 
+    data_entry();
+};
+
+function data_entry()
+{
+    data = {{ data | safe }}
+    output_data(data);
+}
+
+</script>
+
+
+{% endblock %}

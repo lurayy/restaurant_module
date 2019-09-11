@@ -3,11 +3,18 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import uuid
 
+class StaffPosition(models.Model):
+    position = models.CharField(max_length = 200)
+
+    def __str__(self):
+        return(self.position)
+
 class CustomUser(AbstractUser):
     is_rmanager = models.BooleanField(default=False)
     is_rstaff = models.BooleanField(default=True)
     phone_number = models.CharField(blank = True, max_length  =  14)
     emp_id = models.UUIDField(unique = True, default = uuid.uuid4().hex, max_length=7)
+    position = models.ForeignKey(StaffPosition, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.first_name + self.last_name
