@@ -77,15 +77,33 @@ def manage_user(request):
             response['phone_number'].append(str(user.phone_number))
         for pos in (StaffPosition.objects.all()):
             response['position_all'].append(str(pos))
+        print(response)
         return render(request, 'AdminModule/manage_user.html',{'data':response})        
 
 
 def user_profile(request,id):
-    try:
-        user = CustomUser.objects.get(emp_id = str(id), is_superuser = False )
-    except:
-        return HttpResponseRedirect('/404')
-    return render(request, 'AdminModule/edit_profile.html')
+    if request.method == "POST":
+        pass
+    else:
+        try:
+            user = CustomUser.objects.get(emp_id = str(id), is_superuser = False )
+        except:
+            return HttpResponseRedirect('/404')
+
+        response = {'position_all':[]}
+        response['id'] = user.id
+        response['first_name'] = str(user.first_name)
+        response['last_name'] = str(user.last_name)
+        response['username'] = str(user.username)
+        response['email'] = str(user.email)
+        response['phone_number'] = str(user.phone_number)
+        response['manager'] = str(user.is_rmanager)
+        response['emp_id'] = str(user.emp_id)
+        response['position'] = str(user.position)
+        
+        for pos in (StaffPosition.objects.all()):
+                response['position_all'].append(str(pos))
+        return render(request, 'AdminModule/edit_profile.html',{'data':response})
 
 @user_passes_test(check, login_url="/404")
 def admin_panel(request):

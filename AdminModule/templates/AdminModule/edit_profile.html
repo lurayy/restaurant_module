@@ -1,3 +1,182 @@
 {% extends 'MenuModule/base.html' %} {% block content %}
-<h1>Here </h1>
+
+{% load staticfiles %}
+<div class="container">  
+<div class="container-fluid mt--7">
+    <div class="row">
+      <div class="col-xl-9 order-xl-1">
+        <div class="card shadow">
+          <div class="card-body">
+            <form>
+              <h6 class="heading-small text-muted mb-4">User information</h6>
+              <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-first-name">First name</label>
+                      <input type="text" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="">
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-last-name">Last name</label>
+                      <input type="text" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name"  value="">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-email">Email address</label>
+                      <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="email" value="">
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" >Username</label>
+                      <input type="text" id="input-username" class="form-control form-control-alternative"  value="">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" >Phone Number</label>
+                      <input type="number" id="input-phone_number" class="form-control form-control-alternative"  value="">
+                    </div>
+                  </div>
+
+                  
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" >Position</label>
+                      <select id = "select_post" class="form-control form-control-alternative"  value="" ></select>
+                    </div>
+                  </div>
+
+                  
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label">Manager Power</label>
+                      <input type="checkbox" id="input-manager">                     
+                    </div>
+                  </div>
+                  
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label">Employee Id</label>
+                      <input type="text" id="input-emp_id" class="form-control form-control-alternative text-muted" value="" readonly>
+                    </div>
+                  </div>
+
+
+
+
+
+                </div>
+              </div>
+              </form>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <button class="btn btn-success" onclick="update()">Update Profile</button>
+              <button class="btn btn-danger" onclick="delete_staff()">Delete Profile</button>
+            </div>
+            <div class="form-group">
+              
+            </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+
+  $(document).ready(function(){
+    data = {{ data | safe }}
+   assignValue(data);
+});
+
+function assignValue(data){
+  console.log(data)
+    $("#input-first-name").attr("placeholder", data['first_name']);
+    $("#input-last-name").attr("placeholder", data['last_name']);
+    $("#input-email").attr("placeholder", data['email']);
+    $("#input-username").attr("placeholder", data['username']);
+    $("#input-phone_number").attr("placeholder", data['phone_number']);
+    $("#input-emp_id").attr("value", data['emp_id']);
+    
+    y = y = data['position_all'].length;
+    while (y) {
+    y = y -1;
+    if (data['position'] == data['position_all'][y])
+    {
+      $("#select_post").append(
+        '<option value = '+data['position_all'][y]+' selected >'+data['position_all'][y]+'</option>'
+    )
+    }
+    else{
+      $("#select_post").append(
+        '<option value = '+data['position_all'][y]+'>'+data['position_all'][y]+'</option>'
+    )
+    }
+  }
+  if(data['manager'] == "True")
+  {
+    $("#input-manager").prop('checked', true);
+  }    
+}
+
+function update() {
+  var xhttp = new XMLHttpRequest();
+  var first_name = $('#input-first-name').val();
+  var last_name = $("#input-last-name").val();
+  var email = $("#input-email").val();
+  var pin_number = $("#input-pin-number").val();
+  var phone_number = 0
+  if ('{{ user.is_student }}'){
+        phone_number = $("#input-phone-number").val();
+      }
+  var info = {
+      'get':false,
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'pin_number': pin_number,
+      'phone_number': phone_number
+  };
+  $.ajax ({
+      type: 'POST',
+      url: '/user/setting',
+      data: JSON.stringify(info),
+      success: function(data){
+            swal("Your Profile is Updated.", {
+                buttons: {
+                    confirm: true,
+                },
+                })
+                .then(() => {
+                    location.reload();                        
+                })
+        },
+        error: function(data){
+            swal("An unexpected error occured, Please report to the devs.", {
+                dangerMode: true,
+                buttons: {
+                    confirm: true,
+                },
+                })
+                .then(() => {
+                    location.reload();                        
+                })
+        }            
+    });
+}
+</script>
 {% endblock %}
