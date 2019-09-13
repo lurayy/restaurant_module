@@ -65,31 +65,50 @@ def user_registration(request):
 
 @user_passes_test(check,login_url='/404')
 def manage_user(request):
-    if request.method == "POST":
-        pass
-    else:
-        response = {'id':[],'name':[], 'position':[], 'phone_number':[],'position_all':[]}
-        users = CustomUser.objects.all().filter(is_superuser = False)
-        for user in users:
-            response['id'].append(str(user.emp_id))
-            response['name'].append(str(user.first_name +" "+ user.last_name))
-            response['position'].append(str(user.position))
-            response['phone_number'].append(str(user.phone_number))
-        for pos in (StaffPosition.objects.all()):
-            response['position_all'].append(str(pos))
-        print(response)
-        return render(request, 'AdminModule/manage_user.html',{'data':response})        
+    response = {'id':[],'name':[], 'position':[], 'phone_number':[],'position_all':[]}
+    users = CustomUser.objects.all().filter(is_superuser = False)
+    for user in users:
+        response['id'].append(str(user.emp_id))
+        response['name'].append(str(user.first_name +" "+ user.last_name))
+        response['position'].append(str(user.position))
+        response['phone_number'].append(str(user.phone_number))
+    for pos in (StaffPosition.objects.all()):
+        response['position_all'].append(str(pos))
+    print(response)
+    return render(request, 'AdminModule/manage_user.html',{'data':response})        
 
-
+@user_passes_test(check, login_url='/404')
 def user_profile(request,id):
-    if request.method == "POST":
-        pass
+    if request.method == "POST" and id == "update":
+        json_str = request.body.decode(encoding='UTF-8')
+        data = json.loads(json_str)
+        user = CustomUser.objects.get(emp_id = str(data['emp_id']))
+        if (data['delete']) == "True":
+            user.is_active = False
+            user.save()
+        else:
+            if(user and user.is_superuser == False):
+                if (data['first_name']):
+                    user.first_name = str(data['first_name'])
+                if (data['last_name']):
+                    user.last_name = str(data['last_name'])
+                if (data['email']):
+                    user.email = str(data['email'])
+                if (data['phone_number']):
+                    user.phone_number = str(data['phone_number'])
+                if (data['username']):
+                    user.username = str(data["username"])
+                if (data['position']):
+                    pos = StaffPosition.objects.get(position = str(data['position']))
+                    user.position = pos
+                user.is_rmanager = data['manager']
+                user.save()
+        return HttpResponse("Good")
     else:
         try:
             user = CustomUser.objects.get(emp_id = str(id), is_superuser = False )
         except:
             return HttpResponseRedirect('/404')
-
         response = {'position_all':[]}
         response['id'] = user.id
         response['first_name'] = str(user.first_name)
@@ -100,7 +119,6 @@ def user_profile(request,id):
         response['manager'] = str(user.is_rmanager)
         response['emp_id'] = str(user.emp_id)
         response['position'] = str(user.position)
-        
         for pos in (StaffPosition.objects.all()):
                 response['position_all'].append(str(pos))
         return render(request, 'AdminModule/edit_profile.html',{'data':response})
