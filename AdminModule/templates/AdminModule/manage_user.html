@@ -16,8 +16,8 @@
             <hr>
         <div class="card shadow">
             <div class="card-header border-0">
-                <h3 class="mb-0">Show By Position :</h3>  <select id = "select_post" onchange="show_only_of_position(this.value)">
-                </select>   
+                <h4>Show By Position :</h4><select id = "select_post" onchange="show_only_of_position(this.value)">
+                </select><div id="btn_act"></div>
             </div>
             <div class="table-responsive">
                 <table class="table align-items-center table-flush table-hover">
@@ -38,6 +38,11 @@
 
 <script>
 
+function get_user_info(id)
+{
+    location = "/admin/manage_user/"+id
+}
+
 
 function output_data(data)
 {
@@ -51,18 +56,29 @@ function output_data(data)
             '<option value = '+data['position_all'][y]+'>'+data['position_all'][y]+'</option>'
         )
    }
-    show_only_of_position("All")  
 }
 
-function show_only_of_position(position)
+
+var status = "";
+var position = "";
+function show_only_of_position(position = null,status = null)
 {
     data = {{ data | safe }}
+    if(status != null)
+    {
+        self.status = status
+    }
+    if(position != null)
+    {
+        self.position = position
+    }
+    data = data[self.status]
     y = data['id'].length;
     $("#users").empty()
     while(y)
     {
         y = y-1;
-        if(position == data['position_all'][y] || position == "All")
+        if(self.position == data['position'][y] || self.position == "All" )
         {
             $("#users").append(
                 '<tr data-href="'+data['id'][y]+'" class="table-row clickable-row"><td>'+data['name'][y]+'</td><td>'+data['position'][y]+'</td><td>'+data['phone_number'][y]+'</td></tr>'
@@ -75,20 +91,33 @@ function show_only_of_position(position)
     });
 }
 
-function get_user_info(id)
+
+
+function change_status(status)
 {
-    location = "/admin/manage_user/"+id
+    self.status = status
+    if(status)
+    {
+        name = "Inactive"
+        status = 0
+        class_name = "btn-secondary"
+    }
+    else{
+        name = "Active"
+        status = 1
+        class_name = "btn-success"
+    }
+    $("#btn_act").empty()
+    $("#btn_act").append('<button class="float-right btn '+class_name+'" onclick="change_status('+status+')">Show '+name+' Staffs</button>')
+    show_only_of_position()
 }
 
 $(document).ready(); { 
-    data_entry();
-};
-
-function data_entry()
-{
     data = {{ data | safe }}
+    self.position = "All"
     output_data(data);
-}
+    change_status(1)
+};
 
 </script>
 

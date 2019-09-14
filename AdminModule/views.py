@@ -33,6 +33,7 @@ def login_view(request):
                     login(request,user)
                     return HttpResponseRedirect('/reception')
                 else:
+                    # give some error for bad username or pwd
                     return HttpResponseRedirect('login')   
         else:
             form = LoginForm()
@@ -52,11 +53,8 @@ def user_registration(request):
         if user_form.is_valid():
             user = user_form.save(commit=False)
             user.save()
-            print(user)
-            print("user created")
             return HttpResponseRedirect('/admin')
         else:
-            print("error on the forms")
             return render(request, 'AdminModule/staff_id_form.html', { 'user_form':user_form})
     else:
         user_form = UserForm()
@@ -65,17 +63,21 @@ def user_registration(request):
 
 @user_passes_test(check,login_url='/404')
 def manage_user(request):
-    response = {'id':[],'name':[], 'position':[], 'phone_number':[],'position_all':[]}
+    response = {1:{'id':[],'name':[], 'position':[], 'phone_number':[]}, 0:{'id':[],'name':[], 'position':[], 'phone_number':[]},'position_all':[]}
     users = CustomUser.objects.all().filter(is_superuser = False)
     for user in users:
-        response['id'].append(str(user.emp_id))
-        response['name'].append(str(user.first_name +" "+ user.last_name))
-        response['position'].append(str(user.position))
-        response['phone_number'].append(str(user.phone_number))
+        if user.is_active:
+            x = 1
+        else:
+            x = 0
+        response[x]['id'].append(str(user.emp_id))
+        response[x]['name'].append(str(user.first_name +" "+ user.last_name))
+        response[x]['position'].append(str(user.position))
+        response[x]['phone_number'].append(str(user.phone_number))
     for pos in (StaffPosition.objects.all()):
         response['position_all'].append(str(pos))
-    print(response)
     return render(request, 'AdminModule/manage_user.html',{'data':response})        
+
 
 @user_passes_test(check, login_url='/404')
 def user_profile(request,id):
@@ -83,8 +85,8 @@ def user_profile(request,id):
         json_str = request.body.decode(encoding='UTF-8')
         data = json.loads(json_str)
         user = CustomUser.objects.get(emp_id = str(data['emp_id']))
-        if (data['delete']) == "True":
-            user.is_active = False
+        if(data['change_status']):
+            user.is_active = data['status']
             user.save()
         else:
             if(user and user.is_superuser == False):
@@ -118,6 +120,7 @@ def user_profile(request,id):
         response['phone_number'] = str(user.phone_number)
         response['manager'] = str(user.is_rmanager)
         response['emp_id'] = str(user.emp_id)
+        response['is_active'] = str(user.is_active)
         response['position'] = str(user.position)
         for pos in (StaffPosition.objects.all()):
                 response['position_all'].append(str(pos))

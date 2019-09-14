@@ -83,7 +83,11 @@
           <div class="col-lg-6">
             <div class="form-group">
               <button class="btn btn-success" onclick="update()">Update Profile</button>
-              <button class="btn btn-danger" onclick="delete_staff()">Delete Profile</button>
+              {% if data.is_active == "True" %}
+              <button class="btn btn-danger" onclick="change_staff_status('False')">Delete Profile</button>
+              {% else %}
+              <button class="btn btn-warning" onclick="change_staff_status('True')">Activate Profile</button>
+              {% endif %}
             </div>
             <div class="form-group">
               
@@ -160,13 +164,15 @@ function assignValue(data){
   }    
 }
 
-function delete_staff()
+function  change_staff_status(status)
 {
   var xhttp = new XMLHttpRequest();
   var info = {
-      'delete': "True",
+      'change_status':true,
+      'status': status,
       'emp_id': $("#input-emp_id").val(),
   };
+  console.log(status)
   send_thing(info)
 }
 
@@ -181,6 +187,7 @@ function update() {
   var manager = $("#input-manager").is(":checked");
   var emp_id = $("#input-emp_id").val();
   var info = {
+      'change_status':false,
       'first_name': first_name,
       'last_name': last_name,
       'email': email,
@@ -189,7 +196,6 @@ function update() {
       'manager':manager,
       'position':position,
       'emp_id':emp_id,
-      'delete':"False"
   };
   console.log(info)
   $.ajax ({
