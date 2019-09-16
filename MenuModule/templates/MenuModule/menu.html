@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-9 col-md-9">
                 <div class="d-none d-lg-block app">
-                    <ul id="mainlg" class="hs" role="tablist">
+                    <ul id="mainlg" class="nav nav-tabs" role="tablist">
     
                     </ul>
                     <div id="tab-contents" class="tab-content" style="padding-top:50px;">
@@ -145,14 +145,14 @@
             console.log(data)
             for (var food_type in data) {
                 $("#mainlg").append(
-                    "<li class='item'><div class='text-center'><a id='" + food_type + "-tab' data-toggle='tab' href='#" + food_type + "' role='tab' aria-controls='" + food_type + "' aria-selected='true'><img src='https://img.icons8.com/cotton/64/000000/hamburger.png'>" + food_type + "</a></div></li>"
+                    "<li class='item'><a id='" + food_type + "-tab' data-toggle='tab' href='#" + food_type + "' role='tab' aria-controls='" + food_type + "' aria-selected='true'><div class='text-center'><img src='{{ MEDIA_URL}}/"+data[food_type].food_type_image_url[i]+"'>" + food_type + "</div></a></li>"
                 );
                 $("#tab-contents").append(
                     "<div class='tab-pane fade' id='" + food_type + "' role='tabpanel' aria-labelledby='" + food_type + "-tab'><div class='card-columns' id='lg_food_data_" + food_type + "'></div></div>"
                 )
                 for (i = 0; i < data[food_type].name.length; i++) {
                     $('#lg_food_data_' + food_type).append(
-                        "<div class='card card-cascade narrower'><div class='view view-cascade overlay'><img src='{{ MEDIA_URL}}/"+data[food_type].image_url[i]+"' class='card-img-top' onerror=this.src='http://lorempixel.com/200/200/food/"+ [i] +"' alt='not found'> <a><div class='mask rgba-white-slight'></div></a></div><div class='card-body card-body-cascade' ><h5 class='pink-text pb-2 pt-1'><i class='fas fa-utensils'></i> Culinary</h5><h4 class='font-weight-bold card-title'>" + data[food_type].name[i] + "</h4><p class='card-text'>Rs." + data[food_type].price[i] + "<br>"+ data[food_type].description[i]+"</p><button class='btn btn-unique' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +");'>Add</button></div></div>"
+                        "<div class='card card-cascade'><div class='view view-cascade overlay'><img style='height:200px; width:100%; object-fit: cover;' src='{{ MEDIA_URL}}/"+data[food_type].image_url[i]+"' class='card-img-top' onerror=this.src='https://picsum.photos/400/400?random="+ [i] +"' alt='not found'><a><div class='mask rgba-white-slight'></div></a></div><div class='card-body card-body-cascade' ><h5 class='pink-text pb-2 pt-1'><i class='fas fa-utensils'></i> Culinary</h5><h4 class='font-weight-bold card-title'>" + data[food_type].name[i] + "</h4><p class='card-text'>Rs." + data[food_type].price[i] + "<br>"+ data[food_type].description[i]+"</p><button class='btn btn-unique' onclick='add(" + '"' + data[food_type].name[i] + '"' + "," + '"' + data[food_type].price[i] + '"' +");'>Add</button></div></div>"
                     )
                 }
                 $("#mainsm").append(

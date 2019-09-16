@@ -172,7 +172,7 @@ margin-left: 50px;
   grid-column: 1 / -1;
 }
 
-.hs {
+.nav-tabs {
   display: grid;
   grid-gap: calc(var(--gutter) / 1);
   grid-template-columns: repeat(10, calc(20% - var(--gutter) * 2));
@@ -184,8 +184,8 @@ margin-left: 50px;
   margin-bottom: calc(-.25 * var(--gutter));
 }
 
-.hs > li,
-.item {
+.nav-tabs > li,
+.nav-item {
   scroll-snap-align: center;
   padding: calc(var(--gutter) / 2 * 5);
   display: flex;
