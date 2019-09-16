@@ -4,7 +4,7 @@ from asgiref.sync import async_to_sync
 from ApiModule.models import Order, OrderedItem, FoodItem, FoodType, CustomUser
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from AdminModule.models import OrderChange, FoodItemChange
 GROUP_NAME = 'reception'
 
 class ReceptionConsumer(WebsocketConsumer):
@@ -60,22 +60,18 @@ class ReceptionConsumer(WebsocketConsumer):
             order = Order.objects.get(id = int(order_id))
             if (str(state) == "done"):
                 order.state = "DONE"
-                order.save()
             elif (str(state) == "canceled"):
                 order.state = "CANCELED"
-                order.save()
             elif (str(state) == "pending"):
                 order.state = "PENDING"
-                order.save()
             elif (str(state) == "paid"):
                 order.is_paid = True
-                order.save()
             elif (str(state) == "unpaid"):
                 order.is_paid = False
-                order.save()
             else:
                 response_json['success'] = 0
                 response_json['message'] = "Error Updating Order state. Invalid State"
+            order.save()
         except:
             response_json['success'] = 0
             response_json['message'] = "Error Updating Order state. Invalid Order Id. Cannot Retrive Order"
@@ -115,6 +111,8 @@ class ReceptionConsumer(WebsocketConsumer):
             self.get_order(data)
             
 
+    def log_change(change_on,order, changed_to,changed_from):
+        change = OrderChange.create(order= order, change_on = str(change_on), changed_from = str(changed_from), changed_to = str(changed_to) )
 
         #get order , get_by = date, search_by_id,   
         # elif (str(data['type']) == 'get'):

@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import uuid
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+
+import inspect, os
+
+
 
 class StaffPosition(models.Model):
     position = models.CharField(max_length = 200)
@@ -32,7 +38,7 @@ class Table(models.Model):
 
 
 def foodtype_directory_path(instance, filename):
-    return 'foodtype/type_{0}/{0}'.format(instance.name)
+    return 'foodtype/type_{0}/{0}'.format(instance.food_type)
 
 class FoodType(models.Model):
     food_type = models.CharField(max_length = 200,null = True)
@@ -54,9 +60,10 @@ class FoodItem(models.Model):
     is_active = models.BooleanField(default= True)
     image = models.ImageField(null= True, upload_to = user_directory_path, blank = True)
     description = models.TextField(null = True, blank = True)
-
+    last_modified = models.DateField(auto_now = True)
     def __str__(self):
         return self.name
+
 
 
 class Order(models.Model):
@@ -70,6 +77,7 @@ class Order(models.Model):
     table_number = models.ForeignKey(Table, on_delete = models.SET_NULL, null = True)
     paid_price = models.PositiveIntegerField(default = 0)
     is_paid = models.BooleanField(default= False)
+    last_modified = models.DateField(auto_now = True)
 
     def __str__(self):
         return str(self.id)
@@ -78,6 +86,25 @@ class Order(models.Model):
         if self.state == "DONE":
             self.is_paid = True
         super().save(*args, **kwargs)
+
+
+# @receiver(post_save, sender=Order)
+# def change_log_pre(sender, instance, **kwargs):
+#     print("sender=",sender)
+#     print("instance",instance)
+#     print("kwrgs",kwargs)
+
+# def change_log_post(sender, instance, **kwargs):
+#     print("post_save")
+#     print("sender=",sender)
+#     print("instance",instance)
+#     print("kwrgs",kwargs)
+
+
+
+# pre_save.connect(change_log_pre, sender = Order)
+# post_save.connect(change_log_post, sender = Order)
+
 
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order,on_delete= models.CASCADE)
